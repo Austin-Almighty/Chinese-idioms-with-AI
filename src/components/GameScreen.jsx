@@ -1,10 +1,21 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Sparkles } from 'lucide-react';
+import Typewriter from './Typewriter';
 
 const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) => {
     const logEndRef = useRef(null);
+    const [areOptionsVisible, setAreOptionsVisible] = useState(false);
+
     useEffect(() => { logEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [storyLog]);
+
+    // Reset options visibility when a new system message appears or updates
+    useEffect(() => {
+        const lastLog = storyLog[storyLog.length - 1];
+        if (lastLog?.type === 'system') {
+            setAreOptionsVisible(false);
+        }
+    }, [storyLog]);
 
     return (
         <motion.div
@@ -32,15 +43,24 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                             className={`flex ${log.type === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                             <div className={`max-w-[90%] md:max-w-[75%] p-6 rounded-2xl shadow-lg leading-relaxed text-base md:text-lg whitespace-pre-wrap backdrop-blur-sm border ${log.type === 'user'
-                                    ? 'bg-gradient-to-br from-gemini-accent/80 to-gemini-purple/80 text-white rounded-br-none border-white/20'
-                                    : 'bg-slate-800/80 text-slate-100 border-white/10 rounded-bl-none'
+                                ? 'bg-gradient-to-br from-gemini-accent/80 to-gemini-purple/80 text-white rounded-br-none border-white/20'
+                                : 'bg-slate-800/80 text-slate-100 border-white/10 rounded-bl-none'
                                 }`}>
                                 {log.type === 'system' && (
                                     <div className="flex items-center gap-2 text-xs text-gemini-accent mb-3 font-bold tracking-wider uppercase">
                                         <Sparkles className="w-3 h-3" /> 系統 / 導師
                                     </div>
                                 )}
-                                {log.text}
+                                {log.type === 'system' && index === storyLog.length - 1 ? (
+                                    <Typewriter
+                                        text={log.text}
+                                        speed={20}
+                                        onComplete={() => setAreOptionsVisible(true)}
+                                        onType={() => logEndRef.current?.scrollIntoView({ behavior: "smooth" })}
+                                    />
+                                ) : (
+                                    log.text
+                                )}
                             </div>
                         </motion.div>
                     ))}
@@ -65,29 +85,45 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                 <div ref={logEndRef} />
             </div>
 
-            <div className="p-6 border-t border-white/10 bg-black/20 backdrop-blur-xl z-20">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {options.map((option, idx) => (
-                        <motion.button
-                            key={option.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            onClick={() => onChoice(option)}
-                            disabled={isLoading}
-                            className={`group text-left p-4 rounded-xl border transition-all duration-200 relative overflow-hidden ${isLoading
-                                    ? 'opacity-50 cursor-not-allowed bg-slate-800/50 border-white/5'
-                                    : 'glass-btn border-white/10 hover:border-gemini-accent/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]'
-                                }`}
+            <div className="p-6 border-t border-white/10 bg-black/20 backdrop-blur-xl z-20 min-h-[160px]">
+                <AnimatePresence>
+                    {options.length > 0 && areOptionsVisible && (
+                        <motion.div
+                            initial="hidden"
+                            animate="show"
+                            exit="hidden"
+                            variants={{
+                                hidden: { opacity: 0 },
+                                show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                            }}
+                            className="grid grid-cols-1 md:grid-cols-3 gap-4"
                         >
-                            <div className="relative z-10">
-                                <div className="text-lg font-bold text-white mb-1 group-hover:text-gemini-accent transition-colors">{option.idiom}</div>
-                                <div className="text-xs text-slate-400 mb-2 group-hover:text-slate-300">{option.literal}</div>
-                                <div className="text-sm text-slate-300 font-medium pl-2 border-l-2 border-gemini-purple/50 group-hover:border-gemini-accent transition-colors">{option.strategy}</div>
-                            </div>
-                        </motion.button>
-                    ))}
-                </div>
+                            {options.map((option, idx) => (
+                                <motion.button
+                                    key={option.id}
+                                    variants={{
+                                        hidden: { opacity: 0, y: 20, scale: 0.95 },
+                                        show: { opacity: 1, y: 0, scale: 1 }
+                                    }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => onChoice(option)}
+                                    disabled={isLoading}
+                                    className={`group text-left p-4 rounded-xl border transition-all duration-200 relative overflow-hidden ${isLoading
+                                        ? 'opacity-50 cursor-not-allowed bg-slate-800/50 border-white/5'
+                                        : 'glass-btn border-white/10 hover:border-gemini-accent/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+                                        }`}
+                                >
+                                    <div className="relative z-10">
+                                        <div className="text-lg font-bold text-white mb-1 group-hover:text-gemini-accent transition-colors">{option.idiom}</div>
+                                        <div className="text-xs text-slate-400 mb-2 group-hover:text-slate-300">{option.literal}</div>
+                                        <div className="text-sm text-slate-300 font-medium pl-2 border-l-2 border-gemini-purple/50 group-hover:border-gemini-accent transition-colors">{option.strategy}</div>
+                                    </div>
+                                </motion.button>
+                            ))}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </motion.div>
     );

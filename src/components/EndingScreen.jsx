@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { RotateCcw, Trophy, Brain, Zap, AlertTriangle } from 'lucide-react';
+import { RotateCcw, Trophy, Brain, Zap, AlertTriangle, Sparkles } from 'lucide-react';
 
 const EndingScreen = ({ result, storyLog, onRestart }) => {
     if (!result) return null;

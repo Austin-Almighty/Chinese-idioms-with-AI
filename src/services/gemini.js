@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { IDIOM_POOL } from "../data/scenarios";
+import { GAME_SYSTEM_PROMPT } from "../data/prompts";
 
 const API_KEY_STORAGE_KEY = "gemini_api_key";
 
@@ -12,68 +12,109 @@ const getGenAI = () => {
   return new GoogleGenerativeAI(key);
 };
 
-export const generateStoryContinuation = async (scene, choice, history) => {
+// Store the chat session in memory
+let chatSession = null;
+
+const SEPARATOR = "---JSON---";
+
+const handleStreamResponse = async (result, onUpdate) => {
+  let fullText = "";
+  let jsonPart = "";
+  let isJsonFound = false;
+
+  for await (const chunk of result.stream) {
+    const chunkText = chunk.text();
+    fullText += chunkText;
+
+    if (!isJsonFound) {
+      if (fullText.includes(SEPARATOR)) {
+        isJsonFound = true;
+        const [storyPart, potentialJson] = fullText.split(SEPARATOR);
+        onUpdate(storyPart.trim()); // Final update for story text
+        jsonPart = potentialJson || "";
+      } else {
+        onUpdate(fullText);
+      }
+    } else {
+      jsonPart += chunkText;
+    }
+  }
+
+  // If separator wasn't found during stream (edge case), try to split at the end
+  if (!isJsonFound && fullText.includes(SEPARATOR)) {
+    const [storyPart, potentialJson] = fullText.split(SEPARATOR);
+    onUpdate(storyPart.trim());
+    jsonPart = potentialJson;
+  }
+
+  console.log("Gemini Raw Output:", fullText);
+
+  return parseGeminiResponse(jsonPart);
+};
+
+export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
   try {
     const genAI = getGenAI();
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-    const prompt = `
-      You are a creative writing assistant for an interactive fiction game about Chinese idioms.
+    chatSession = model.startChat({
+      history: [
+        {
+          role: "user",
+          parts: [{ text: GAME_SYSTEM_PROMPT }],
+        },
+        {
+          role: "model",
+          parts: [{ text: "Understood. I am ready to start the game. Please provide the setting and difficulty." }],
+        },
+      ],
+    });
+
+    const msg = `
+      Setting: ${scenario.title}
+      Difficulty: ${difficulty}
+      Description: ${scenario.desc}
+      Initial Context: ${scenario.initialText}
       
-      Current Scenario: ${scene.title}
-      Description: ${scene.desc}
-      Initial Context: ${scene.initialText}
-      
-      History of events:
-      ${history.map(h => `${h.type === 'user' ? 'User Choice' : 'System Story'}: ${h.text}`).join('\n')}
-      
-      The user just chose the idiom: "${choice.idiom}"
-      Strategy description: "${choice.strategy}"
-      Literal meaning: "${choice.literal}"
-      
-      Task:
-      1. Analyze if this idiom is appropriate for the current situation (Aggressive, Conservative, or Negative/Misused).
-      2. Generate a continuation of the story (max 150 words) describing the outcome of this action.
-         - If the choice was good, show a positive progression but maybe a new challenge.
-         - If the choice was bad (negative idiom or poor strategy), show the consequences.
-      3. Provide 3 new idiom options for the NEXT turn.
-         - One Aggressive/Bold option.
-         - One Conservative/Smart option.
-         - One Negative/Poor option.
-         - For each option, provide: idiom, literal meaning, and a strategy description relevant to the NEW situation.
-      
-      Output Format (JSON):
-      {
-        "story": "The story continuation...",
-        "analysis": "Brief analysis of the user's move (e.g., 'Aggressive move, but risky...')",
-        "options": [
-          { "id": "A", "idiom": "...", "literal": "...", "strategy": "..." },
-          { "id": "B", "idiom": "...", "literal": "...", "strategy": "..." },
-          { "id": "C", "idiom": "...", "literal": "...", "strategy": "..." }
-        ]
-      }
-      
-      IMPORTANT: Return ONLY valid JSON. Do not use Markdown code blocks.
+      Start Round 1.
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    
-    // Clean up potential markdown code blocks if the model adds them
+    console.log("Gemini Input (Start Game):", msg);
+
+    const result = await chatSession.sendMessageStream(msg);
+    return handleStreamResponse(result, onUpdate);
+
+  } catch (error) {
+    console.error("Gemini Start Game Error:", error);
+    throw error;
+  }
+};
+
+export const submitChoiceStream = async (choice, onUpdate) => {
+  if (!chatSession) throw new Error("Game session not started");
+
+  try {
+    const msg = `User chose Option ${choice.id}: ${choice.idiom}`;
+    console.log("Gemini Input (Submit Choice):", msg);
+    const result = await chatSession.sendMessageStream(msg);
+    return handleStreamResponse(result, onUpdate);
+  } catch (error) {
+    console.error("Gemini Submit Choice Error:", error);
+    throw error;
+  }
+};
+
+const parseGeminiResponse = (text) => {
+  try {
+    // Clean up potential markdown code blocks
     const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(jsonStr);
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    // Fallback if API fails or key is missing
+  } catch (e) {
+    console.error("Failed to parse JSON:", text);
     return {
-      story: "系統無法連接到 AI 腦波 (請檢查 API Key)。但你的決策已記錄。\n\n(模擬回應) 你使用了這個成語，局勢發生了變化...",
-      analysis: "API Error",
-      options: [
-        { id: 'A', ...IDIOM_POOL.aggressive[0] },
-        { id: 'B', ...IDIOM_POOL.conservative[0] },
-        { id: 'C', ...IDIOM_POOL.negative[0] }
-      ]
+      round: 0,
+      is_game_over: false,
+      options: []
     };
   }
 };
@@ -81,7 +122,7 @@ export const generateStoryContinuation = async (scene, choice, history) => {
 export const analyzeGameplay = async (history) => {
   try {
     const genAI = getGenAI();
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
     const prompt = `
       Analyze the following gameplay session of the "Idiom Survival Guide".

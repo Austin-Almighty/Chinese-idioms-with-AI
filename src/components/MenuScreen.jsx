@@ -27,11 +27,11 @@ const MenuScreen = ({ onStart, onOpenSettings }) => (
         >
             <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-gemini-purple/20 border border-gemini-purple/30 text-gemini-purple text-sm font-medium mb-6 backdrop-blur-sm">
                 <Sparkles className="w-4 h-4" />
-                <span>AI 驅動的情境模擬</span>
+                <span>成語文字冒險遊戲</span>
             </div>
 
             <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight font-serif text-white drop-shadow-lg">
-                成語生存指南<br />
+                跟AI玩成語<br />
                 <span className="text-3xl md:text-5xl font-light opacity-80 mt-4 block text-gradient">
                     情境模擬器
                 </span>
