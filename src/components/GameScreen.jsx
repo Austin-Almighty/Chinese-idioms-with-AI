@@ -109,7 +109,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => onChoice(option)}
                                     disabled={isLoading}
-                                    className={`group text-left p-4 rounded-xl border transition-all duration-200 relative overflow-hidden ${isLoading
+                                    className={`group text-left px-4 pb-4 pt-4 rounded-xl border transition-all duration-200 relative overflow-hidden flex flex-col justify-start h-full ${isLoading
                                         ? 'opacity-50 cursor-not-allowed bg-slate-800/50 border-white/5'
                                         : 'glass-btn border-white/10 hover:border-gemini-accent/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]'
                                         }`}

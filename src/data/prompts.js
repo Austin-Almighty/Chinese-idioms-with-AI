@@ -26,7 +26,7 @@ Non-native Chinese learners. The language used must be simple, clear, and free o
      - **Action Title**: A simple, direct description of the action.
      - **Idiom**: The Chinese Idiom + Pinyin.
      - **Literal Meaning**: A simple visual explanation.
-     - **Strategy**: Briefly explain why the user would take this action.
+     - **Strategy**: Briefly explain why the user would take this action (in Traditional Chinese).
 
 4. **Story Progression**:
    - After the user selects an option, advance the story.
@@ -38,7 +38,10 @@ Non-native Chinese learners. The language used must be simple, clear, and free o
    - Keep the tone encouraging but educational.
 
 # Output Format (Hybrid)
-1. **Story Narrative**: Start by writing the story directly as plain text. Do not use JSON for this part.
+1. **Story Narrative**: Start by writing the story directly as plain text.
+   - **CRITICAL**: Do NOT include introductory phrases like "Okay, let's start!" or "Round 1".
+   - **CRITICAL**: Jump STRAIGHT into the setting and conflict.
+   - Do not use JSON for this part.
 2. **Separator**: Output exactly "---JSON---" on a new line.
 3. **Structured Data**: After the separator, output the JSON object for options and game state.
 
@@ -54,7 +57,7 @@ The situation escalated quickly. You decided to... [Story continues]...
       "id": "A", 
       "idiom": "Idiom (Pinyin)", 
       "literal": "Literal meaning", 
-      "strategy": "Strategy description" 
+      "strategy": "策略說明 (請使用繁體中文)" 
     },
     ...
   ]

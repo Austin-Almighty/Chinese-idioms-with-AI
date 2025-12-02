@@ -47,7 +47,7 @@ const handleStreamResponse = async (result, onUpdate) => {
     jsonPart = potentialJson;
   }
 
-  console.log("Gemini Raw Output:", fullText);
+  console.log("[Gemini API] Raw Output:", fullText);
 
   return parseGeminiResponse(jsonPart);
 };
@@ -79,13 +79,13 @@ export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
       Start Round 1.
     `;
 
-    console.log("Gemini Input (Start Game):", msg);
+    console.log("[Gemini API] Input (Start Game):", msg);
 
     const result = await chatSession.sendMessageStream(msg);
     return handleStreamResponse(result, onUpdate);
 
   } catch (error) {
-    console.error("Gemini Start Game Error:", error);
+    console.error("[Gemini API] Start Game Error:", error);
     throw error;
   }
 };
@@ -95,11 +95,11 @@ export const submitChoiceStream = async (choice, onUpdate) => {
 
   try {
     const msg = `User chose Option ${choice.id}: ${choice.idiom}`;
-    console.log("Gemini Input (Submit Choice):", msg);
+    console.log("[Gemini API] Input (Submit Choice):", msg);
     const result = await chatSession.sendMessageStream(msg);
     return handleStreamResponse(result, onUpdate);
   } catch (error) {
-    console.error("Gemini Submit Choice Error:", error);
+    console.error("[Gemini API] Submit Choice Error:", error);
     throw error;
   }
 };
@@ -149,13 +149,18 @@ export const analyzeGameplay = async (history) => {
       IMPORTANT: Return ONLY valid JSON.
     `;
 
+    console.log("[Gemini API] Input (Analysis):", prompt);
+
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
+    
+    console.log("[Gemini API] Output (Analysis):", text);
+
     const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(jsonStr);
   } catch (error) {
-    console.error("Gemini Analysis Error:", error);
+    console.error("[Gemini API] Analysis Error:", error);
     return {
       title: "未知旅人",
       evaluation: "無法連接 AI 進行分析。但你完成了一次精彩的冒險！",

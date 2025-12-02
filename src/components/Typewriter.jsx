@@ -15,19 +15,23 @@ const Typewriter = ({ text, speed = 30, onComplete, onType }) => {
         const interval = setInterval(() => {
             setVisibleCount((prev) => {
                 if (prev < text.length) {
-                    if (onType) onType();
                     return prev + 1;
-                }
-                if (prev === text.length && onComplete) {
-                    onComplete(); // Optional: trigger only once?
-                    // For now, let's not trigger onComplete repeatedly.
                 }
                 return prev;
             });
         }, speed);
 
         return () => clearInterval(interval);
-    }, [text, speed, onComplete]);
+    }, [text, speed]);
+
+    useEffect(() => {
+        if (visibleCount > 0 && visibleCount <= text.length) {
+            if (onType) onType();
+        }
+        if (visibleCount === text.length && onComplete) {
+            onComplete();
+        }
+    }, [visibleCount, text.length, onComplete, onType]);
 
     // If text is "...", we might want to start from 0 if it changes to "Story"?
     // But "..." -> "Story" (len 3 -> 5). visibleCount 3.

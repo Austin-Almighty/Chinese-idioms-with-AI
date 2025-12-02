@@ -68,7 +68,7 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
 
     const filteredScenarios = useMemo(() => {
         return allScenarios.filter(s => {
-            const matchesDifficulty = s.difficulty === difficulty || s.difficulty === 'any';
+            const matchesDifficulty = true; // Allow all scenarios regardless of difficulty
             const matchesTab = activeTab === 'all' || s.category === activeTab;
             const matchesSearch = s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 s.desc.toLowerCase().includes(searchQuery.toLowerCase());

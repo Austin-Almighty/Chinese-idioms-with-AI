@@ -63,30 +63,32 @@ const EndingScreen = ({ result, storyLog, onRestart }) => {
                 </div>
 
                 <div className="p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-12 bg-slate-900/50">
-                    <motion.div variants={item}>
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <motion.div variants={item} className="flex flex-col h-full">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 flex-shrink-0">
                             <span className="w-1 h-6 bg-gemini-accent rounded-full shadow-[0_0_10px_#3b82f6]"></span>
                             成語導師點評
                         </h3>
-                        <p className="text-slate-300 leading-relaxed text-lg mb-6 text-justify font-light">
-                            {result.evaluation}
-                        </p>
-                        <div className="bg-amber-900/20 p-5 rounded-xl border border-amber-500/20">
-                            <h4 className="font-bold text-amber-400 mb-2 text-sm flex items-center gap-2">
-                                <Sparkles className="w-4 h-4" /> 學習筆記
-                            </h4>
-                            <p className="text-amber-200/80 text-sm leading-relaxed">
-                                這次冒險中，你學會了運用成語來解決實際問題。下次遇到類似情境時，試著回想這些成語的策略含義。
+                        <div className="max-h-[400px] overflow-y-auto pr-2 pb-6 custom-scrollbar">
+                            <p className="text-slate-300 leading-relaxed text-lg mb-6 text-justify font-light">
+                                {result.evaluation}
                             </p>
+                            <div className="bg-amber-900/20 p-5 rounded-xl border border-amber-500/20">
+                                <h4 className="font-bold text-amber-400 mb-2 text-sm flex items-center gap-2">
+                                    <Sparkles className="w-4 h-4" /> 學習筆記
+                                </h4>
+                                <p className="text-amber-200/80 text-sm leading-relaxed">
+                                    這次冒險中，你學會了運用成語來解決實際問題。下次遇到類似情境時，試著回想這些成語的策略含義。
+                                </p>
+                            </div>
                         </div>
                     </motion.div>
 
-                    <motion.div variants={item}>
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <motion.div variants={item} className="flex flex-col h-full">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 flex-shrink-0">
                             <span className="w-1 h-6 bg-slate-500 rounded-full"></span>
                             決策回顧
                         </h3>
-                        <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                             {storyLog.filter(l => l.type === 'user').map((log, idx) => (
                                 <div key={idx} className="flex gap-4 group">
                                     <div className="flex flex-col items-center">
