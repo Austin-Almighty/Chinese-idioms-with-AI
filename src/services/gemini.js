@@ -2,9 +2,13 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GAME_SYSTEM_PROMPT } from "../data/prompts";
 
 const API_KEY_STORAGE_KEY = "gemini_api_key";
+const API_MODEL_STORAGE_KEY = "gemini_model";
 
 export const getApiKey = () => localStorage.getItem(API_KEY_STORAGE_KEY);
 export const setApiKey = (key) => localStorage.setItem(API_KEY_STORAGE_KEY, key);
+
+export const getStoredModel = () => localStorage.getItem(API_MODEL_STORAGE_KEY) || "gemini-1.5-pro";
+export const setStoredModel = (model) => localStorage.setItem(API_MODEL_STORAGE_KEY, model);
 
 const getGenAI = () => {
   const key = getApiKey();
@@ -55,7 +59,8 @@ const handleStreamResponse = async (result, onUpdate) => {
 export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
   try {
     const genAI = getGenAI();
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+    const modelId = getStoredModel();
+    const model = genAI.getGenerativeModel({ model: modelId });
 
     chatSession = model.startChat({
       history: [
@@ -79,7 +84,7 @@ export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
       Start Round 1.
     `;
 
-    console.log("[Gemini API] Input (Start Game):", msg);
+    console.log(`[Gemini API] Input (Start Game) [Model: ${modelId}]:`, msg);
 
     const result = await chatSession.sendMessageStream(msg);
     return handleStreamResponse(result, onUpdate);
@@ -122,7 +127,8 @@ const parseGeminiResponse = (text) => {
 export const analyzeGameplay = async (history) => {
   try {
     const genAI = getGenAI();
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+    const modelId = getStoredModel();
+    const model = genAI.getGenerativeModel({ model: modelId });
 
     const prompt = `
       Analyze the following gameplay session of the "Idiom Survival Guide".

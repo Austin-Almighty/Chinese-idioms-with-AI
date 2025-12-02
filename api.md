@@ -21,8 +21,12 @@ The session is initialized with a System Prompt followed by the User's Context.
 4. Story Progression: Outcome must reflect the idiom.
 # Output Format (Hybrid)
 1. **Story Narrative**: Plain text story first.
+   - **CRITICAL**: Do NOT include introductory phrases like "Okay, let's start!" or "Round 1".
+   - **CRITICAL**: Jump STRAIGHT into the setting and conflict.
+   - Do not use JSON for this part.
 2. **Separator**: "---JSON---" on a new line.
 3. **Structured Data**: JSON object for options.
+
 2. User Message (Trigger) Provides the specific scenario details selected by the player.
 
 Setting: [Scenario Title] (e.g., 經典文學篇：賈府風雲)
@@ -30,6 +34,7 @@ Difficulty: [Difficulty] (e.g., hard)
 Description: [Scenario Description]
 Initial Context: [Initial Text]
 Start Round 1.
+
 Output (Received from API)
 A hybrid stream containing the narrative text first, followed by a separator and the JSON data.
 
@@ -44,19 +49,19 @@ You are the head of the Jia family. The air in the room is heavy... [Story conti
       "id": "A", 
       "idiom": "釜底抽薪 (fǔ dǐ chōu xīn)", 
       "literal": "Remove firewood from under the pot", 
-      "strategy": "Solve the problem at its root." 
+      "strategy": "你認為這是解決問題的根本之道 (Traditional Chinese)" 
     },
     { 
       "id": "B", 
       "idiom": "揚湯止沸 (yáng tāng zhǐ fèi)", 
       "literal": "Scoop up soup to stop it boiling", 
-      "strategy": "A temporary fix that doesn't solve the core issue." 
+      "strategy": "這只是暫時的解決方案，無法根治問題 (Traditional Chinese)" 
     },
     { 
       "id": "C", 
       "idiom": "靜觀其變 (jìng guān qí biàn)", 
       "literal": "Watch quietly for changes", 
-      "strategy": "Wait and see how the situation develops." 
+      "strategy": "先觀察局勢變化，再決定下一步行動 (Traditional Chinese)" 
     }
   ]
 }

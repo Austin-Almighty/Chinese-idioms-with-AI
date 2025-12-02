@@ -6,6 +6,7 @@ import SceneSelectionScreen from './components/SceneSelectionScreen';
 import GameScreen from './components/GameScreen';
 import EndingScreen from './components/EndingScreen';
 import SettingsModal from './components/SettingsModal';
+import ParticleBackground from './components/ParticleBackground';
 // Keep for fallback if needed, or remove if fully unused.
 // Actually, I'll remove it since we are relying on the API now.
 // Wait, I should check if I need it for fallback in gemini.js? 
@@ -172,6 +173,8 @@ const App = () => {
       {/* Background Orbs */}
       <div className="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-gemini-purple/20 rounded-full blur-[100px] pointer-events-none animate-float" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-gemini-accent/20 rounded-full blur-[120px] pointer-events-none animate-float" style={{ animationDelay: '-3s' }} />
+
+      <ParticleBackground />
 
       <div className="w-full max-w-6xl h-[90vh] glass-panel rounded-3xl overflow-hidden relative flex flex-col border border-white/10 shadow-2xl z-10">
         <AnimatePresence mode="wait">
