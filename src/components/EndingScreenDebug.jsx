@@ -90,7 +90,7 @@ const EndingScreenDebug = ({ onRestart }) => {
                                 <p className="text-slate-300 leading-relaxed text-lg mb-6 text-justify font-light">
                                     {result.evaluation}
                                 </p>
-                                <div className="h-12 w-full" />
+                                <div className="h-8 w-full" />
                             </div>
                         </div>
                     </motion.div>

@@ -6,6 +6,7 @@ import SceneSelectionScreen from './components/SceneSelectionScreen';
 import GameScreen from './components/GameScreen';
 import EndingScreen from './components/EndingScreen';
 import SettingsModal from './components/SettingsModal';
+import AnalyzingScreen from './components/AnalyzingScreen';
 import ParticleBackground from './components/ParticleBackground';
 // Keep for fallback if needed, or remove if fully unused.
 // Actually, I'll remove it since we are relying on the API now.
@@ -87,8 +88,10 @@ const App = () => {
 
       if (result.is_game_over) {
         // Game Over - Analyze results
+        setGameState('analyzing');
+
         // Note: For analysis, we pass the full history including the final streamed story
-        const finalLog = [...newLog, { type: 'system', text: storyLog[storyLog.length - 1]?.text || "" }]; // This might be slightly off due to closure, better to re-read state or pass result text if available. 
+        const finalLog = [...newLog, { type: 'system', text: storyLog[storyLog.length - 1]?.text || "" }];
         // Actually, result.story isn't returned in the new hybrid format, only options. 
         // Wait, handleStreamResponse returns parsed JSON. The text is in the log.
         // Let's grab the text from the updateLastLog side effect or just trust the state update?
@@ -165,6 +168,7 @@ const App = () => {
           onBack={() => setGameState('scene_select')}
         />
       );
+      case 'analyzing': return <AnalyzingScreen key="analyzing" />;
       case 'ending': return <EndingScreen key="ending" result={analysisResult} storyLog={storyLog} onRestart={handleRestart} />;
       case 'debug': return <EndingScreenDebug onRestart={handleRestart} />;
       default: return null;
