@@ -64,7 +64,8 @@ const App = () => {
       setTurnCount(1);
     } catch (error) {
       console.error("Failed to start game:", error);
-      setStoryLog(prev => [...prev, { type: 'system', text: `系統連線失敗: ${error.message || "未知錯誤"} (請檢查 API Key)` }]);
+      const errorMessage = error.userMessage || error.message || "未知錯誤";
+      setStoryLog(prev => [...prev, { type: 'system', text: errorMessage }]);
     } finally {
       setIsLoading(false);
     }
@@ -139,7 +140,8 @@ const App = () => {
       }
     } catch (error) {
       console.error("Error", error);
-      setStoryLog(prev => [...prev, { type: 'system', text: "發生錯誤，請稍後再試。" }]);
+      const errorMessage = error.userMessage || error.message || "發生錯誤，請稍後再試。";
+      setStoryLog(prev => [...prev, { type: 'system', text: errorMessage }]);
     } finally {
       setIsLoading(false);
     }

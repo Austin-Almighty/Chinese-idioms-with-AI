@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GAME_SYSTEM_PROMPT } from "../data/prompts";
+import { handleGeminiError } from "./errorHandler";
 
 const API_KEY_STORAGE_KEY = "gemini_api_key";
 const API_MODEL_STORAGE_KEY = "gemini_model";
@@ -91,7 +92,7 @@ export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
 
   } catch (error) {
     console.error("[Gemini API] Start Game Error:", error);
-    throw error;
+    throw handleGeminiError(error);
   }
 };
 
@@ -105,7 +106,7 @@ export const submitChoiceStream = async (choice, onUpdate) => {
     return handleStreamResponse(result, onUpdate);
   } catch (error) {
     console.error("[Gemini API] Submit Choice Error:", error);
-    throw error;
+    throw handleGeminiError(error);
   }
 };
 
@@ -174,9 +175,12 @@ export const analyzeGameplay = async (history) => {
     return JSON.parse(jsonStr);
   } catch (error) {
     console.error("[Gemini API] Analysis Error:", error);
+    const handledError = handleGeminiError(error);
+    
+    // For analysis errors, return a friendly fallback instead of throwing
     return {
       title: "未知旅人",
-      evaluation: "無法連接 AI 進行分析。但你完成了一次精彩的冒險！",
+      evaluation: `評估時發生問題：${handledError.userMessage}\n\n雖然無法完成詳細分析，但你已經完成了一次精彩的冒險！`,
       stats: { aggressive: 0, conservative: 0, negative: 0 }
     };
   }
