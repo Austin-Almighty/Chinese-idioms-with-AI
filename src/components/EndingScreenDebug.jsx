@@ -2,8 +2,25 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { RotateCcw, Trophy, Brain, Zap, AlertTriangle, Sparkles } from 'lucide-react';
 
-const EndingScreen = ({ result, storyLog, onRestart }) => {
-    if (!result) return null;
+const EndingScreenDebug = ({ onRestart }) => {
+    // Hardcoded result for debugging
+    const result = {
+        title: "堅定且溫情的協調者 (Firm yet Warm Harmonizer)",
+        stats: {
+            aggressive: 2,
+            conservative: 2,
+            negative: 0
+        },
+        evaluation: "這位玩家展現了卓越的判斷力與對成語深刻的理解。在面對一系列挑戰時，他們始終選擇了一種務實、謹慎且有原則的方法，並且每次都能將所選成語的策略精準地應用於當前情境，從而獲得了豐厚的回報。 1. **實事求是 (shí shì qiú shì)**：在魔藥學考試材料缺失的困境中，玩家選擇了誠實面對，並尋求正確的解決方法。這完全符合「實事求是」的精髓——從事實出發，不規避問題。雖然因此扣分，但避免了更嚴重的處罰，展現了誠信與擔當。 2. **循規蹈矩 (xún guī dǎo jǔ)**：面對禁林的誘惑，玩家沒有盲目冒險，而是選擇遵守校規，這體現了對規則的尊重和對自身安全的負責。這種保守但穩妥的策略，在充滿未知的危險環境中往往是最明智的選擇。 3. **知難而退 (zhī nán ér tuì)**：當遇到無法單獨應對的巨怪時，玩家準確評估了形勢，選擇了撤退求援。這並非懦弱，而是「知難而退」的智慧體現——明智地避開不可為之的鋒芒，保存實力以待後援。這種策略在實力懸殊的對抗中至關重要。 4. **雪中送炭 (xuě zhōng sòng tàn)**：在朋友陷入困境時，玩家選擇了「雪中送炭」，在不涉及金錢風險的前提下提供精神支持與關懷，展現了真正的同理心與友情深度，完美平衡了自我保護與助人為樂。總體而言，玩家是一位理智、成熟且富有責任感的決策者。他們不為一時的利益或衝動所左右，而是能夠根據實際情況做出最有利於長遠發展的選擇。這種穩健求實的風格，無論是在魔法世界還是在現實生活中，都是通往成功的基石。"
+    };
+
+    // Hardcoded story log for debugging
+    const storyLog = [
+        { type: 'user', text: "選擇【順水推舟 (shùn shuǐ tuī zhōu)】" },
+        { type: 'user', text: "選擇【當機立斷 (dāng jī lì duàn)】" },
+        { type: 'user', text: "選擇【開誠佈公 (kāi chéng bù gōng)】" },
+        { type: 'user', text: "選擇【雪中送炭 (xuě zhōng sòng tàn)】" }
+    ];
 
     const container = {
         hidden: { opacity: 0 },
@@ -84,7 +101,7 @@ const EndingScreen = ({ result, storyLog, onRestart }) => {
                             決策回顧
                         </h3>
                         <div className="max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                            <div className="space-y-4 pb-48">
+                            <div className="space-y-4 pb-20">
                                 {storyLog.filter(l => l.type === 'user').map((log, idx) => (
                                     <div key={idx} className="flex gap-4 group">
                                         <div className="flex flex-col items-center">
@@ -126,4 +143,4 @@ const EndingScreen = ({ result, storyLog, onRestart }) => {
     );
 };
 
-export default EndingScreen;
+export default EndingScreenDebug;

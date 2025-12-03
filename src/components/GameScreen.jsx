@@ -48,7 +48,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                                 }`}>
                                 {log.type === 'system' && (
                                     <div className="flex items-center gap-2 text-xs text-gemini-accent mb-3 font-bold tracking-wider uppercase">
-                                        <Sparkles className="w-3 h-3" /> 系統 / 導師
+                                        <Sparkles className="w-3 h-3" /> 說書人
                                     </div>
                                 )}
                                 {log.type === 'system' && index === storyLog.length - 1 ? (

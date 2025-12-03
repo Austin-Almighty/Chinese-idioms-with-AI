@@ -13,6 +13,8 @@ import ParticleBackground from './components/ParticleBackground';
 // gemini.js uses it for fallback. App.jsx doesn't need it anymore.
 import { startNewGameStream, submitChoiceStream, analyzeGameplay } from './services/gemini';
 
+import EndingScreenDebug from './components/EndingScreenDebug';
+
 const App = () => {
   const [gameState, setGameState] = useState('menu');
   const [difficulty, setDifficulty] = useState('easy');
@@ -164,6 +166,7 @@ const App = () => {
         />
       );
       case 'ending': return <EndingScreen key="ending" result={analysisResult} storyLog={storyLog} onRestart={handleRestart} />;
+      case 'debug': return <EndingScreenDebug onRestart={handleRestart} />;
       default: return null;
     }
   };
