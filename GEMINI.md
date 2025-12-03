@@ -60,6 +60,8 @@ Powered by **Google's Gemini Pro**, the game offers a non-linear storytelling ex
     - [x] Glassmorphism Design System.
     - [x] Framer Motion Animations.
     - [x] Responsive Layouts.
+    - [x] **New**: Analyzing Screen with loading animation.
+    - [x] **New**: Enhanced Ending Screen with scrollable content.
 - [x] **Content Expansion**:
     - [x] Difficulty Levels (Easy/Medium/Hard).
     - [x] Categorized Scene Selection.
