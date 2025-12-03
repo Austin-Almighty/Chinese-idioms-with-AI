@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Search, BookOpen, GraduationCap, Coffee, Briefcase, TrendingUp, Cpu, HelpCircle, Grid, List, Play, X } from 'lucide-react';
-import { SCENARIOS } from '../data/scenarios';
-import rawScenarios from '../../data/情境.json';
+import rawScenarios from '../data/情境.json';
 
 const CATEGORIES = [
     { id: 'all', label: '全部', icon: Grid },
@@ -58,7 +57,8 @@ const jsonScenarios = Object.entries(rawScenarios).map(([key, data], index) => {
     };
 });
 
-const allScenarios = [...SCENARIOS, ...jsonScenarios];
+// Use only JSON scenarios
+const allScenarios = jsonScenarios;
 
 const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
     const [activeTab, setActiveTab] = useState('all');
