@@ -24,12 +24,12 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
             exit={{ opacity: 0 }}
             className="flex-1 flex flex-col h-full relative w-full overflow-hidden"
         >
-            <div className="h-16 flex items-center justify-between px-6 z-20 bg-black/20 backdrop-blur-md border-b border-white/10">
-                <button onClick={onBack} className="flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5">
-                    <ArrowLeft className="w-4 h-4" /> 返回列表
+            <div className="h-14 sm:h-16 flex items-center justify-between px-3 sm:px-6 z-20 bg-black/20 backdrop-blur-md border-b border-white/10">
+                <button onClick={onBack} className="flex items-center gap-1 sm:gap-2 text-slate-400 hover:text-white text-xs sm:text-sm transition-colors px-2 sm:px-3 py-1.5 rounded-lg hover:bg-white/5">
+                    <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" /> <span className="hidden sm:inline">返回列表</span><span className="sm:hidden">返回</span>
                 </button>
-                <span className="text-lg font-bold tracking-wide text-white drop-shadow-md">{scene.title}</span>
-                <div className="w-10"></div>
+                <span className="text-sm sm:text-lg font-bold tracking-wide text-white drop-shadow-md line-clamp-1">{scene.title}</span>
+                <div className="w-8 sm:w-10"></div>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 custom-scrollbar relative">
@@ -85,7 +85,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                 <div ref={logEndRef} />
             </div>
 
-            <div className="p-6 border-t border-white/10 bg-black/20 backdrop-blur-xl z-20 min-h-[160px]">
+            <div className="p-3 sm:p-6 border-t border-white/10 bg-black/20 backdrop-blur-xl z-20 min-h-[140px] sm:min-h-[160px]">
                 <AnimatePresence>
                     {options.length > 0 && areOptionsVisible && (
                         <motion.div
@@ -96,8 +96,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                                 hidden: { opacity: 0 },
                                 show: { opacity: 1, transition: { staggerChildren: 0.1 } }
                             }}
-                            className="grid grid-cols-1 md:grid-cols-3 gap-4"
-                        >
+                            className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                             {options.map((option, idx) => (
                                 <motion.button
                                     key={option.id}
@@ -109,15 +108,14 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => onChoice(option)}
                                     disabled={isLoading}
-                                    className={`group text-left px-4 pb-4 pt-4 rounded-xl border transition-all duration-200 relative overflow-hidden flex flex-col justify-start h-full ${isLoading
+                                    className={`group text-left px-3 sm:px-4 pb-3 sm:pb-4 pt-3 sm:pt-4 rounded-xl border transition-all duration-200 relative overflow-hidden flex flex-col justify-start h-full ${isLoading
                                         ? 'opacity-50 cursor-not-allowed bg-slate-800/50 border-white/5'
                                         : 'glass-btn border-white/10 hover:border-gemini-accent/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]'
-                                        }`}
-                                >
+                                        }`}>
                                     <div className="relative z-10">
-                                        <div className="text-lg font-bold text-white mb-1 group-hover:text-gemini-accent transition-colors">{option.idiom}</div>
+                                        <div className="text-base sm:text-lg font-bold text-white mb-1 group-hover:text-gemini-accent transition-colors">{option.idiom}</div>
                                         <div className="text-xs text-slate-400 mb-2 group-hover:text-slate-300">{option.literal}</div>
-                                        <div className="text-sm text-slate-300 font-medium pl-2 border-l-2 border-gemini-purple/50 group-hover:border-gemini-accent transition-colors">{option.strategy}</div>
+                                        <div className="text-xs sm:text-sm text-slate-300 font-medium pl-2 border-l-2 border-gemini-purple/50 group-hover:border-gemini-accent transition-colors">{option.strategy}</div>
                                     </div>
                                 </motion.button>
                             ))}
