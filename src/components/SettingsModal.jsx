@@ -13,12 +13,12 @@ const MODELS = [
 
 const SettingsModal = ({ isOpen, onClose }) => {
     const [key, setKey] = useState('');
-    const [model, setModel] = useState('gemini-1.5-pro');
+    const [model, setModel] = useState('gemini-2.5-flash');
 
     useEffect(() => {
         if (isOpen) {
             setKey(getApiKey() || '');
-            setModel(getStoredModel() || 'gemini-1.5-pro');
+            setModel(getStoredModel() || 'gemini-2.5-flash');
         }
     }, [isOpen]);
 

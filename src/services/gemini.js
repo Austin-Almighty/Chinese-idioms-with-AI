@@ -17,7 +17,7 @@ export const getApiKey = () => {
 
 export const setApiKey = (key) => localStorage.setItem(API_KEY_STORAGE_KEY, key);
 
-export const getStoredModel = () => localStorage.getItem(API_MODEL_STORAGE_KEY) || "gemini-1.5-pro";
+export const getStoredModel = () => localStorage.getItem(API_MODEL_STORAGE_KEY) || "gemini-2.5-flash";
 export const setStoredModel = (model) => localStorage.setItem(API_MODEL_STORAGE_KEY, model);
 
 const getGenAI = () => {
