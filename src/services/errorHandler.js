@@ -26,11 +26,11 @@ export const handleGeminiError = (error) => {
   const errorDetails = error?.response?.error?.message || '';
 
   // Check for specific error patterns
-  if (errorMessage.includes('API Key not found') || errorMessage.includes('API key')) {
+  if (errorMessage.includes('API Key not configured') || errorMessage.includes('API Key not found') || errorMessage.includes('API key')) {
     return new GeminiAPIError(
-      'API Key not found',
+      'API Key not configured',
       'INVALID_API_KEY',
-      '❌ API 金鑰錯誤\n\n請點擊右上角的設定按鈕，重新輸入有效的 Gemini API 金鑰。'
+      '🔑 需要設定 API 金鑰\n\n此 Demo 需要 API 金鑰才能運作。\n請聯絡管理員或點擊右上角設定按鈕輸入您自己的金鑰。'
     );
   }
 

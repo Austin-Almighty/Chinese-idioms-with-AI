@@ -22,7 +22,9 @@ export const setStoredModel = (model) => localStorage.setItem(API_MODEL_STORAGE_
 
 const getGenAI = () => {
   const key = getApiKey();
-  if (!key) throw new Error("API Key not found");
+  if (!key || key === 'your_api_key_here') {
+    throw new Error("API Key not configured. Please add your Gemini API key to the .env file or Settings.");
+  }
   return new GoogleGenerativeAI(key);
 };
 
