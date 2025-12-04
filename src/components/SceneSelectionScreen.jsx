@@ -47,9 +47,9 @@ const jsonScenarios = Object.entries(rawScenarios).map(([key, data], index) => {
     const category = getCategory(data['角色'], data['故事內容/衝突']);
     const scenarioNumber = index + 1;
 
-    // Map AI-generated images for scenarios 1-15
+    // Map AI-generated images for scenarios 1-15 (optimized WebP format)
     const imageUrl = scenarioNumber <= 15
-        ? `/img/scenario${scenarioNumber}.png`
+        ? `/img/scenario${scenarioNumber}.webp`
         : "";
 
     return {
@@ -227,6 +227,7 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                         <img
                                             src={scene.imageUrl || `https://placehold.co/600x400/${scene.imageColor}/1e293b?text=${encodeURIComponent(scene.title.split('：')[0])}`}
                                             alt={scene.title}
+                                            loading="lazy"
                                             className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
                                         />
                                         {/* Category Badge */}
@@ -297,6 +298,7 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                 <img
                                     src={selectedScenario.imageUrl || `https://placehold.co/600x400/${selectedScenario.imageColor}/1e293b?text=${encodeURIComponent(selectedScenario.title.split('：')[0])}`}
                                     alt={selectedScenario.title}
+                                    loading="lazy"
                                     className="w-full h-full object-cover opacity-60"
                                 />
                                 <button
