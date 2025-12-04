@@ -118,7 +118,7 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex-1 flex flex-col h-full w-full overflow-hidden bg-slate-950/50 relative"
+            className="flex-1 flex flex-col h-full w-full overflow-hidden bg-white/40 dark:bg-slate-950/50 relative transition-colors duration-300"
         >
             {/* Transition Overlay */}
             <AnimatePresence>
@@ -126,13 +126,13 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 z-[60] bg-black flex items-center justify-center pointer-events-none"
+                        className="absolute inset-0 z-[60] bg-white dark:bg-black flex items-center justify-center pointer-events-none"
                     >
                         <motion.div
                             initial={{ scale: 1, opacity: 0 }}
                             animate={{ scale: 1.5, opacity: 1 }}
                             transition={{ duration: 0.8, ease: "easeInOut" }}
-                            className="text-white font-serif text-3xl font-bold tracking-widest"
+                            className="text-slate-900 dark:text-white font-serif text-3xl font-bold tracking-widest"
                         >
                             {selectedScenario?.title.split('：')[1] || selectedScenario?.title}
                         </motion.div>
@@ -147,20 +147,20 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                 className="flex-1 flex flex-col h-full w-full overflow-hidden"
             >
                 {/* Header Area */}
-                <div className="p-6 border-b border-white/10 bg-black/20 backdrop-blur-md z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div className="p-6 border-b border-white/20 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-md z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between transition-colors duration-300">
                     <div className="flex items-center gap-4">
-                        <button onClick={onBack} className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors">
+                        <button onClick={onBack} className="p-2 rounded-full hover:bg-white/20 dark:hover:bg-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
                             <ArrowLeft className="w-5 h-5" />
                         </button>
                         <div>
-                            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                            <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
                                 <span className={`w-2 h-6 rounded-full bg-gradient-to-b ${difficulty === 'easy' ? 'from-emerald-400 to-teal-500' :
                                     difficulty === 'medium' ? 'from-blue-400 to-indigo-500' :
                                         'from-purple-400 to-pink-500'
                                     }`} />
                                 選擇劇本
                             </h2>
-                            <p className="text-xs text-slate-400 mt-0.5">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                                 {difficulty === 'easy' ? '簡單 (Easy)' : difficulty === 'medium' ? '中等 (Medium)' : '困難 (Hard)'}
                             </p>
                         </div>
@@ -174,13 +174,13 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                             placeholder="搜尋劇本..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-slate-900/50 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-gemini-accent/50 focus:ring-1 focus:ring-gemini-accent/50 transition-all placeholder:text-slate-600"
+                            className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-gemini-accent/50 focus:ring-1 focus:ring-blue-500/50 dark:focus:ring-gemini-accent/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                         />
                     </div>
                 </div>
 
                 {/* Category Tabs */}
-                <div className="px-6 py-4 border-b border-white/5 overflow-x-auto custom-scrollbar">
+                <div className="px-6 py-4 border-b border-white/10 dark:border-white/5 overflow-x-auto custom-scrollbar">
                     <div className="flex gap-2 min-w-max">
                         {CATEGORIES.map(cat => {
                             const Icon = cat.icon;
@@ -190,8 +190,8 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                     key={cat.id}
                                     onClick={() => setActiveTab(cat.id)}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${isActive
-                                        ? 'bg-white text-slate-900 shadow-lg shadow-white/10'
-                                        : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
+                                        ? 'bg-white dark:bg-white text-slate-900 shadow-lg shadow-black/5 dark:shadow-white/10'
+                                        : 'bg-white/40 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'
                                         }`}
                                 >
                                     <Icon className="w-4 h-4" />
@@ -219,20 +219,20 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                     whileHover={{ y: -4, scale: 1.01 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleScenarioClick(scene)}
-                                    className={`group relative glass-panel rounded-xl overflow-hidden cursor-pointer border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col h-full ${scene.id === 'red_chamber_poison' ? 'ring-1 ring-amber-500/30' : ''}`}
+                                    className={`group relative glass-panel rounded-xl overflow-hidden cursor-pointer border border-white/20 dark:border-white/5 hover:border-blue-400/50 dark:hover:border-white/20 transition-all duration-300 flex flex-col h-full ${scene.id === 'red_chamber_poison' ? 'ring-1 ring-amber-500/30' : ''}`}
                                 >
                                     {/* Image/Color Header */}
-                                    <div className="h-24 w-full relative overflow-hidden bg-slate-800">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent z-10" />
+                                    <div className="h-24 w-full relative overflow-hidden bg-slate-200 dark:bg-slate-800">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 dark:from-white/5 to-transparent z-10" />
                                         <img
                                             src={scene.imageUrl || `https://placehold.co/600x400/${scene.imageColor}/1e293b?text=${encodeURIComponent(scene.title.split('：')[0])}`}
                                             alt={scene.title}
                                             loading="lazy"
-                                            className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
+                                            className="w-full h-full object-cover opacity-90 dark:opacity-60 group-hover:opacity-100 dark:group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
                                         />
                                         {/* Category Badge */}
                                         <div className="absolute top-2 right-2 z-20">
-                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-black/50 text-white backdrop-blur-sm border border-white/10 uppercase tracking-wider">
+                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/80 dark:bg-black/50 text-slate-900 dark:text-white backdrop-blur-sm border border-white/20 dark:border-white/10 uppercase tracking-wider">
                                                 {CATEGORIES.find(c => c.id === scene.category)?.label || scene.category}
                                             </span>
                                         </div>
@@ -240,16 +240,16 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
 
                                     {/* Content */}
                                     <div className="p-4 flex-1 flex flex-col">
-                                        <h3 className="text-base font-bold text-white mb-2 line-clamp-1 group-hover:text-gemini-accent transition-colors">
+                                        <h3 className="text-base font-bold text-slate-800 dark:text-white mb-2 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-gemini-accent transition-colors">
                                             {scene.title.split('：')[1] || scene.title}
                                         </h3>
-                                        <p className="text-slate-400 text-xs line-clamp-2 leading-relaxed mb-3 flex-1">
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs line-clamp-2 leading-relaxed mb-3 flex-1">
                                             {scene.desc}
                                         </p>
 
-                                        <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
-                                            <span className="text-[10px] text-slate-500 font-mono">ID: {scene.id.slice(0, 6)}</span>
-                                            <span className="text-xs text-gemini-accent opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 font-medium">
+                                        <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-200 dark:border-white/5">
+                                            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">ID: {scene.id.slice(0, 6)}</span>
+                                            <span className="text-xs text-blue-500 dark:text-gemini-accent opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 font-medium">
                                                 選擇 →
                                             </span>
                                         </div>
@@ -267,7 +267,7 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                             <p>沒有找到符合條件的劇本</p>
                             <button
                                 onClick={() => { setActiveTab('all'); setSearchQuery(''); }}
-                                className="mt-4 text-sm text-gemini-accent hover:underline"
+                                className="mt-4 text-sm text-blue-500 dark:text-gemini-accent hover:underline"
                             >
                                 清除篩選
                             </button>
@@ -291,52 +291,52 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+                            className="w-full max-w-md bg-white dark:bg-slate-900 border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
                         >
-                            <div className="relative h-32 bg-slate-800 overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10" />
+                            <div className="relative h-32 bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 to-transparent z-10" />
                                 <img
                                     src={selectedScenario.imageUrl || `https://placehold.co/600x400/${selectedScenario.imageColor}/1e293b?text=${encodeURIComponent(selectedScenario.title.split('：')[0])}`}
                                     alt={selectedScenario.title}
                                     loading="lazy"
-                                    className="w-full h-full object-cover opacity-60"
+                                    className="w-full h-full object-cover opacity-90 dark:opacity-60"
                                 />
                                 <button
                                     onClick={handleCloseModal}
-                                    className="absolute top-4 right-4 z-20 p-2 bg-black/40 hover:bg-black/60 rounded-full text-white/70 hover:text-white transition-colors backdrop-blur-sm"
+                                    className="absolute top-4 right-4 z-20 p-2 bg-black/20 hover:bg-black/40 rounded-full text-slate-800 hover:text-white dark:text-white/70 dark:hover:text-white transition-colors backdrop-blur-sm"
                                 >
                                     <X className="w-4 h-4" />
                                 </button>
                             </div>
 
                             <div className="p-6 -mt-12 relative z-20">
-                                <div className="inline-block px-3 py-1 rounded-full bg-gemini-accent text-white text-xs font-bold mb-4 shadow-lg">
+                                <div className="inline-block px-3 py-1 rounded-full bg-blue-500 dark:bg-gemini-accent text-white text-xs font-bold mb-4 shadow-lg">
                                     {difficulty === 'easy' ? '簡單' : difficulty === 'medium' ? '中等' : '困難'}
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-2 font-serif">
+                                <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2 font-serif">
                                     {selectedScenario.title.split('：')[1] || selectedScenario.title}
                                 </h3>
-                                <div className="flex items-center gap-2 text-sm text-slate-400 mb-4">
-                                    <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10">
+                                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-4">
+                                    <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                                         {CATEGORIES.find(c => c.id === selectedScenario.category)?.label}
                                     </span>
                                     <span>•</span>
                                     <span>{selectedScenario.title.split('：')[0]}</span>
                                 </div>
-                                <p className="text-slate-300 text-sm leading-relaxed mb-8">
+                                <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-8">
                                     {selectedScenario.desc}
                                 </p>
 
                                 <div className="flex gap-3">
                                     <button
                                         onClick={handleCloseModal}
-                                        className="flex-1 py-3 px-4 rounded-xl border border-white/10 text-slate-300 hover:bg-white/5 hover:text-white transition-colors font-medium text-sm"
+                                        className="flex-1 py-3 px-4 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white transition-colors font-medium text-sm"
                                     >
                                         再想想
                                     </button>
                                     <button
                                         onClick={handleConfirmStart}
-                                        className="flex-[2] py-3 px-4 rounded-xl bg-gradient-to-r from-gemini-accent to-gemini-purple text-white font-bold shadow-lg hover:shadow-gemini-accent/25 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                        className="flex-[2] py-3 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-gemini-accent dark:to-gemini-purple text-white font-bold shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-gemini-accent/25 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                     >
                                         <Play className="w-4 h-4 fill-current" />
                                         開始挑戰

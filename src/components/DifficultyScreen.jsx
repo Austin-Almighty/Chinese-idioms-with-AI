@@ -46,17 +46,17 @@ const DifficultyScreen = ({ onSelect, onBack }) => {
             <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-1 sm:gap-2 text-slate-400 hover:text-white transition-colors px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/10">
+                    className="flex items-center gap-1 sm:gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/20 dark:hover:border-white/10">
                     <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span className="font-medium text-sm sm:text-base">返回主選單</span>
                 </button>
             </div>
 
             <div className="flex-1 flex flex-col items-center justify-start overflow-y-auto p-4 sm:p-8 pt-20 sm:pt-24">
-                <motion.h2 variants={item} className="text-3xl sm:text-4xl font-bold text-white mb-3 font-serif drop-shadow-lg text-center">
+                <motion.h2 variants={item} className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-white mb-3 font-serif drop-shadow-lg text-center">
                     選擇學習情境
                 </motion.h2>
-                <motion.p variants={item} className="text-slate-300 mb-8 sm:mb-12 text-center text-base sm:text-lg max-w-2xl font-light px-4">
+                <motion.p variants={item} className="text-slate-600 dark:text-slate-300 mb-8 sm:mb-12 text-center text-base sm:text-lg max-w-2xl font-light px-4">
                     每個難度都代表著不同的人生階段與挑戰。<br />準備好測試你的成語智慧了嗎？
                 </motion.p>
 
@@ -68,7 +68,7 @@ const DifficultyScreen = ({ onSelect, onBack }) => {
                             whileHover={{ y: -8, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleSelect(diff.id)}
-                            className="group relative p-6 sm:p-8 rounded-3xl glass-panel text-left transition-all duration-300 hover:bg-white/15 hover:border-white/40 overflow-hidden flex flex-col h-full">
+                            className="group relative p-6 sm:p-8 rounded-3xl glass-panel text-left transition-all duration-300 hover:bg-white/40 dark:hover:bg-white/15 hover:border-blue-300/50 dark:hover:border-white/40 overflow-hidden flex flex-col h-full">
                             {/* Gradient Bar */}
                             <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${diff.color}`} />
 
@@ -79,15 +79,15 @@ const DifficultyScreen = ({ onSelect, onBack }) => {
                                 <span className="text-5xl sm:text-6xl filter drop-shadow-xl group-hover:scale-110 transition-transform duration-300 inline-block">{diff.icon}</span>
                             </div>
 
-                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-200 transition-all">
+                            <h3 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 dark:group-hover:from-white dark:group-hover:to-slate-200 transition-all">
                                 {diff.label}
                             </h3>
 
-                            <p className="text-slate-400 group-hover:text-slate-200 transition-colors leading-relaxed text-sm font-light">
+                            <p className="text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors leading-relaxed text-sm font-light">
                                 {diff.subtitle}
                             </p>
 
-                            <div className="mt-auto pt-4 sm:pt-6 flex items-center text-xs sm:text-sm font-bold text-slate-500 group-hover:text-white transition-colors">
+                            <div className="mt-auto pt-4 sm:pt-6 flex items-center text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-white transition-colors">
                                 <span className="uppercase tracking-widest">Start Challenge</span>
                                 <span className="ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">→</span>
                             </div>

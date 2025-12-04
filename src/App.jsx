@@ -13,6 +13,7 @@ import ParticleBackground from './components/ParticleBackground';
 // Wait, I should check if I need it for fallback in gemini.js? 
 // gemini.js uses it for fallback. App.jsx doesn't need it anymore.
 import { startNewGameStream, submitChoiceStream, analyzeGameplay } from './services/gemini';
+import Header from './components/Header';
 
 import EndingScreenDebug from './components/EndingScreenDebug';
 
@@ -161,12 +162,18 @@ const App = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-0 sm:p-4 font-sans relative overflow-hidden">
       {/* Background Orbs - Smaller on mobile */}
-      <div className="fixed top-[-10%] left-[-10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-gemini-purple/20 rounded-full blur-[100px] pointer-events-none animate-float" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-gemini-accent/20 rounded-full blur-[120px] pointer-events-none animate-float" style={{ animationDelay: '-3s' }} />
+      <div className="fixed top-[-10%] left-[-10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-blue-200/30 dark:bg-gemini-purple/20 rounded-full blur-[100px] pointer-events-none animate-float transition-colors duration-500" />
+      <div className="fixed bottom-[-10%] right-[-10%] w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-purple-200/30 dark:bg-gemini-accent/20 rounded-full blur-[120px] pointer-events-none animate-float transition-colors duration-500" style={{ animationDelay: '-3s' }} />
 
       <ParticleBackground />
 
-      <div className="w-full h-screen sm:h-[90vh] sm:max-w-6xl glass-panel sm:rounded-3xl overflow-hidden relative flex flex-col border-0 sm:border border-white/10 shadow-2xl z-10">
+
+
+      <div className="w-full h-screen sm:h-[90vh] sm:max-w-6xl glass-panel sm:rounded-3xl overflow-hidden relative flex flex-col border-0 sm:border border-white/20 dark:border-white/10 shadow-2xl z-10 transition-colors duration-300">
+        <Header
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          onHome={() => setGameState('menu')}
+        />
         <AnimatePresence mode="wait">
           {renderContent()}
         </AnimatePresence>
