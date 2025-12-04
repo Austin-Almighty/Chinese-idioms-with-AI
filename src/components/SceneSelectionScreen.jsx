@@ -5,23 +5,23 @@ import rawScenarios from '../data/情境.json';
 
 const CATEGORIES = [
     { id: 'all', label: '全部', icon: Grid },
-    { id: 'classic', label: '經典文學', icon: BookOpen },
-    { id: 'campus', label: '校園生活', icon: GraduationCap },
-    { id: 'life', label: '日常應用', icon: Coffee },
-    { id: 'modern', label: '職場生存', icon: Briefcase },
-    { id: 'business', label: '商戰博弈', icon: TrendingUp },
-    { id: 'scifi', label: '科幻未來', icon: Cpu },
+    { id: 'life', label: '日常生活', icon: Coffee },
+    { id: 'modern', label: '職場挑戰', icon: Briefcase },
+    { id: 'business', label: '商戰權謀', icon: TrendingUp },
+    { id: 'classic', label: '古代歷史', icon: BookOpen },
+    { id: 'scifi', label: '科幻冒險', icon: Cpu },
+    { id: 'campus', label: '校園社交', icon: GraduationCap },
     { id: 'mystery', label: '懸疑推理', icon: HelpCircle },
 ];
 
 const categoryKeywords = {
-    classic: ['古代', '三國', '後宮', '漢朝', '王朝', '書生', '盜墓', '謀士', '將軍', '皇帝', '貴妃'],
-    campus: ['學生', '社團', '學校', '宿舍', '考試', '魔法學院', '新生', '大學'],
-    life: ['民眾', '消費者', '鄰里', '聚餐', '相親', '父母', '朋友', '租屋', '旅遊', '餐廳', '便利商店', '捷運', '公園', '衣服', '下雨', '老人', '廁所', '打工', '外送'],
-    modern: ['職場', '公司', '主管', '同事', '面試', '實習生', '經紀人', '廚師', '醫生', '護理師', '警察', '消防員', '藝人', '明星', '實況主', '創作者'],
-    business: ['CEO', '創業', '談判', '併購', '投資', '股東', '商業', '競選', '市長', '候選人'],
-    scifi: ['太空', '末日', '喪屍', '荒島', '時空旅人', '外星', 'AI', '異世界', '倖存者'],
-    mystery: ['偵探', '兇手', '懸疑', '密室', '警察', '謎案']
+    classic: ['三國', '後宮', '漢朝', '王朝', '書生', '盜墓', '謀士', '將軍', '皇帝', '貴妃', '才人', '答應', '守城', '進京趕考', '摸金校尉', '秦始皇陵'],
+    campus: ['學生', '社團', '學校', '宿舍', '考試', '魔法學院', '新生', '大學', '社長', '幹部'],
+    life: ['民眾', '消費者', '鄰里', '聚餐', '相親', '父母', '朋友', '租屋', '旅遊', '餐廳', '便利商店', '捷運', '公園', '衣服', '下雨', '老人', '廁所', '打工', '外送', '家族', '逢年過節', '管委會', '私生子', '豪門'],
+    modern: ['職場', '公司', '主管', '同事', '面試', '實習生', '經紀人', '廚師', '醫生', '護理師', '警察', '消防員', '藝人', '明星', '實況主', '創作者', '菜鳥', '急診室', '選秀', '偶像', '網路', '內容'],
+    business: ['CEO', '創業', '談判', '併購', '投資', '股東', '商業', '競選', '市長', '候選人', '總幹事', '破產', '撤資', '新創', '規劃師', '都市', '財團'],
+    scifi: ['太空', '末日', '喪屍', '荒島', '時空旅人', '外星', 'AI', '異世界', '倖存者', '火星', '殖民地', '引擎故障', '太空船', '艦長', '冒險者', '公會'],
+    mystery: ['偵探', '兇手', '懸疑', '密室', '警察', '謎案', '私家', '線索', '證詞', '真相', '抽絲剝繭']
 };
 
 const getCategory = (role, content) => {
@@ -45,14 +45,21 @@ const categoryColors = {
 // Transform JSON scenarios
 const jsonScenarios = Object.entries(rawScenarios).map(([key, data], index) => {
     const category = getCategory(data['角色'], data['故事內容/衝突']);
+    const scenarioNumber = index + 1;
+
+    // Map AI-generated images for scenarios 1-8
+    const imageUrl = scenarioNumber <= 8
+        ? `/img/scenario${scenarioNumber}.png`
+        : "";
+
     return {
-        id: `json_${index + 1}`,
+        id: `json_${scenarioNumber}`,
         category: category,
         title: `${data['角色']}`, // Use Role as title part
         desc: data['故事內容/衝突'],
         difficulty: 'any', // Available to all
         imageColor: categoryColors[category] || '64748b',
-        imageUrl: "",
+        imageUrl: imageUrl,
         initialText: data['故事內容/衝突'] // Use content as initial text
     };
 });
