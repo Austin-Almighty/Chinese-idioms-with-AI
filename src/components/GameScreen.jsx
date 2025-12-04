@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import Typewriter from './Typewriter';
 
-const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) => {
+const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isGameOver, onViewSummary }) => {
     const logEndRef = useRef(null);
     const [areOptionsVisible, setAreOptionsVisible] = useState(false);
 
@@ -87,7 +87,26 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
 
             <div className="p-3 sm:p-6 border-t border-white/10 bg-black/20 backdrop-blur-xl z-20 min-h-[140px] sm:min-h-[160px]">
                 <AnimatePresence>
-                    {options.length > 0 && areOptionsVisible && (
+                    {isGameOver && areOptionsVisible ? (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            className="flex items-center justify-center h-full">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={onViewSummary}
+                                disabled={isLoading}
+                                className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-gemini-accent to-gemini-purple text-white text-lg sm:text-xl font-bold rounded-2xl shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_50px_rgba(139,92,246,0.6)] transition-all overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span className="relative z-10 flex items-center gap-3">
+                                    <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
+                                    查看導師評價
+                                </span>
+                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                            </motion.button>
+                        </motion.div>
+                    ) : options.length > 0 && areOptionsVisible ? (
                         <motion.div
                             initial="hidden"
                             animate="show"
@@ -120,7 +139,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack }) =
                                 </motion.button>
                             ))}
                         </motion.div>
-                    )}
+                    ) : null}
                 </AnimatePresence>
             </div>
         </motion.div>

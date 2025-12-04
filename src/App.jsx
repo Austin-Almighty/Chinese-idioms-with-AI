@@ -18,7 +18,7 @@ import EndingScreenDebug from './components/EndingScreenDebug';
 
 const App = () => {
   const [gameState, setGameState] = useState('menu');
-  const [difficulty, setDifficulty] = useState('easy');
+  const [difficulty, setDifficulty] = useState('medium');
   const [selectedScene, setSelectedScene] = useState(null);
   const [storyLog, setStoryLog] = useState([]);
   const [currentOptions, setCurrentOptions] = useState([]);
@@ -26,6 +26,7 @@ const App = () => {
   const [turnCount, setTurnCount] = useState(0);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const handleDifficultySelect = (diff) => {
     setDifficulty(diff);
@@ -88,51 +89,9 @@ const App = () => {
       });
 
       if (result.is_game_over) {
-        // Game Over - Analyze results
-        setGameState('analyzing');
-
-        // Note: For analysis, we pass the full history including the final streamed story
-        const finalLog = [...newLog, { type: 'system', text: storyLog[storyLog.length - 1]?.text || "" }];
-        // Actually, result.story isn't returned in the new hybrid format, only options. 
-        // Wait, handleStreamResponse returns parsed JSON. The text is in the log.
-        // Let's grab the text from the updateLastLog side effect or just trust the state update?
-        // State update inside callback might not be reflected immediately in this scope.
-        // Better approach: handleStreamResponse returns the JSON. We need the final text for analysis.
-        // Let's assume the last log entry IS the final text.
-
-        // Re-fetch log from state in a useEffect? No, too complex.
-        // Let's just pass the current log + the text we just streamed.
-        // But we don't have the final text variable here easily unless we capture it.
-        // Let's rely on the fact that analyzeGameplay takes the history.
-        // We need to include the final system response in the history for the analysis to make sense.
-        // Let's modify `submitChoiceStream` to return the full text AND the json?
-        // No, `handleStreamResponse` returns `parseGeminiResponse(jsonPart)`.
-
-        // Let's just grab the text from the UI state in the next render?
-        // Or better: Let's make `analyzeGameplay` robust enough.
-
-        // Correct fix: We will use the `setStoryLog` functional update to get the latest text? No, that's for setting.
-        // Let's just use the fact that we are in a functional component.
-        // We can't easily get the final text here without changing `handleStreamResponse`.
-
-        // Let's modify `handleStreamResponse` in `gemini.js` to return `{ ...json, fullText }`?
-        // That seems cleanest. But I can't edit gemini.js again in this turn easily without breaking flow.
-        // Wait, I can. I haven't finished the task.
-
-        // For now, let's just trigger the analysis with what we have. 
-        // Actually, the analysis runs on the *history*. 
-        // If we don't pass the final story, the analysis won't know the ending.
-        // I will assume for now that I can get the text from the state update mechanism or just pass a placeholder.
-        // Actually, I'll just skip passing the *very last* message to analysis if it's too hard, 
-        // OR I can rely on `storyLog` being updated? No, closure.
-
-        // OK, I will rely on the fact that `analyzeGameplay` is called *after* the stream finishes.
-        // I'll just pass `newLog` for now, and maybe the analysis will just be based on the user's last choice.
-        // That's acceptable for now.
-
-        const analysis = await analyzeGameplay(newLog);
-        setAnalysisResult(analysis);
-        setGameState('ending');
+        // Game Over - Stay on GameScreen, show summary button
+        setIsGameOver(true);
+        setCurrentOptions([]); // Clear options to show summary button
       } else {
         // Continue Game
         setCurrentOptions(result.options);
@@ -147,11 +106,31 @@ const App = () => {
     }
   }, [isLoading, storyLog]);
 
+  const handleViewSummary = useCallback(async () => {
+    setIsLoading(true);
+    setGameState('analyzing');
+
+    try {
+      const analysis = await analyzeGameplay(storyLog);
+      setAnalysisResult(analysis);
+      setGameState('ending');
+    } catch (error) {
+      console.error("Analysis error:", error);
+      // Still show ending screen with fallback data
+      setGameState('ending');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [storyLog]);
+
   const handleRestart = () => {
+    setGameState('menu');
+    setSelectedScene(null);
     setStoryLog([]);
+    setCurrentOptions([]);
     setTurnCount(0);
     setAnalysisResult(null);
-    setGameState('menu');
+    setIsGameOver(false);
   };
 
   const renderContent = () => {
@@ -168,6 +147,8 @@ const App = () => {
           isLoading={isLoading}
           onChoice={handleChoice}
           onBack={() => setGameState('scene_select')}
+          isGameOver={isGameOver}
+          onViewSummary={handleViewSummary}
         />
       );
       case 'analyzing': return <AnalyzingScreen key="analyzing" />;
