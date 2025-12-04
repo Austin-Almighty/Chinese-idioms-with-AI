@@ -68,7 +68,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
                                     className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:border-gemini-accent focus:ring-2 focus:ring-gemini-accent/20 outline-none transition-all font-mono text-sm placeholder:text-slate-600"
                                 />
                                 <p className="text-xs text-slate-500 mt-2">
-                                    您的 API Key 僅會儲存在瀏覽器端，用於與 Google Gemini 進行對話。
+                                    已預設 Demo API Key。若需使用自己的 Key,請在此輸入並儲存。
                                 </p>
                             </div>
 

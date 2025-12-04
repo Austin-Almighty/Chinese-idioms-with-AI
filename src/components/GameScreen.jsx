@@ -6,8 +6,22 @@ import Typewriter from './Typewriter';
 const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isGameOver, onViewSummary }) => {
     const logEndRef = useRef(null);
     const [areOptionsVisible, setAreOptionsVisible] = useState(false);
+    const [shuffledOptions, setShuffledOptions] = useState([]);
 
     useEffect(() => { logEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [storyLog]);
+
+    // Shuffle options when they change to prevent position-based gaming
+    useEffect(() => {
+        if (options.length > 0) {
+            const shuffled = [...options];
+            // Fisher-Yates shuffle algorithm
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            setShuffledOptions(shuffled);
+        }
+    }, [options]);
 
     // Reset options visibility when a new system message appears or updates
     useEffect(() => {
@@ -106,7 +120,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                             </motion.button>
                         </motion.div>
-                    ) : options.length > 0 && areOptionsVisible ? (
+                    ) : shuffledOptions.length > 0 && areOptionsVisible ? (
                         <motion.div
                             initial="hidden"
                             animate="show"
@@ -116,7 +130,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                                 show: { opacity: 1, transition: { staggerChildren: 0.1 } }
                             }}
                             className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-                            {options.map((option, idx) => (
+                            {shuffledOptions.map((option, idx) => (
                                 <motion.button
                                     key={option.id}
                                     variants={{

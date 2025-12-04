@@ -5,7 +5,16 @@ import { handleGeminiError } from "./errorHandler";
 const API_KEY_STORAGE_KEY = "gemini_api_key";
 const API_MODEL_STORAGE_KEY = "gemini_model";
 
-export const getApiKey = () => localStorage.getItem(API_KEY_STORAGE_KEY);
+// Get API key from localStorage first, then fall back to environment variable
+export const getApiKey = () => {
+  const storedKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+  if (storedKey) return storedKey;
+  
+  // Fall back to environment variable for demo/testing
+  const envKey = import.meta.env.VITE_GEMINI_API_KEY;
+  return envKey || null;
+};
+
 export const setApiKey = (key) => localStorage.setItem(API_KEY_STORAGE_KEY, key);
 
 export const getStoredModel = () => localStorage.getItem(API_MODEL_STORAGE_KEY) || "gemini-1.5-pro";
