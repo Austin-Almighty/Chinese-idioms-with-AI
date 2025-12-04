@@ -25,6 +25,8 @@ Chinese language learners at intermediate level. The language used must be clear
 
 3. **The Options (CRITICAL)**:
    - For every problem, provide exactly **3 distinct choices** (A, B, C).
+   - The choices should be **mutually exclusive**
+   - The choices should be relevant to the current situation
    - Each choice must represent a different strategy:
      - One **Wise/Positive** strategy.
      - One **Foolish/Negative** strategy.
