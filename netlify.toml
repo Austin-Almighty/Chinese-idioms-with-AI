@@ -1,0 +1,19 @@
+# Netlify Configuration
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # Build command
+  command = "npm run build"
+  # Publish directory
+  publish = "dist"
+
+[build.environment]
+  # Omit VITE_GEMINI_API_KEY from secret scanning
+  # This is intentional as we're using a client-side API key for demo purposes
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY"
+
+# Optional: Redirect rules for SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
