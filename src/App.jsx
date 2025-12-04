@@ -16,6 +16,7 @@ import { startNewGameStream, submitChoiceStream, analyzeGameplay } from './servi
 import Header from './components/Header';
 
 import EndingScreenDebug from './components/EndingScreenDebug';
+import { Toaster } from "@/components/ui/toaster"
 
 const App = () => {
   const [gameState, setGameState] = useState('menu');
@@ -179,6 +180,7 @@ const App = () => {
         </AnimatePresence>
       </div>
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <Toaster />
     </div>
   );
 };
