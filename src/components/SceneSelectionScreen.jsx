@@ -189,12 +189,12 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                 <button
                                     key={cat.id}
                                     onClick={() => setActiveTab(cat.id)}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${isActive
+                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-medium transition-all duration-200 ${isActive
                                         ? 'bg-white dark:bg-white text-slate-900 shadow-lg shadow-black/5 dark:shadow-white/10'
                                         : 'bg-white/40 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'
                                         }`}
                                 >
-                                    <Icon className="w-4 h-4" />
+                                    <Icon className="w-5 h-5" />
                                     {cat.label}
                                 </button>
                             );
@@ -291,9 +291,9 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-md bg-white dark:bg-slate-900 border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+                            className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
                         >
-                            <div className="relative h-32 bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                            <div className="relative h-48 bg-slate-200 dark:bg-slate-800 overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 to-transparent z-10" />
                                 <img
                                     src={selectedScenario.imageUrl || `https://placehold.co/600x400/${selectedScenario.imageColor}/1e293b?text=${encodeURIComponent(selectedScenario.title.split('：')[0])}`}
@@ -305,7 +305,7 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                     onClick={handleCloseModal}
                                     className="absolute top-4 right-4 z-20 p-2 bg-black/20 hover:bg-black/40 rounded-full text-slate-800 hover:text-white dark:text-white/70 dark:hover:text-white transition-colors backdrop-blur-sm"
                                 >
-                                    <X className="w-4 h-4" />
+                                    <X className="w-5 h-5" />
                                 </button>
                             </div>
 
@@ -313,32 +313,32 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                 <div className="inline-block px-3 py-1 rounded-full bg-blue-500 dark:bg-gemini-accent text-white text-xs font-bold mb-4 shadow-lg">
                                     {difficulty === 'easy' ? '簡單' : difficulty === 'medium' ? '中等' : '困難'}
                                 </div>
-                                <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2 font-serif">
+                                <h3 className="text-3xl font-bold text-slate-800 dark:text-white mb-3 font-serif">
                                     {selectedScenario.title.split('：')[1] || selectedScenario.title}
                                 </h3>
-                                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-4">
+                                <div className="flex items-center gap-2 text-base text-slate-500 dark:text-slate-400 mb-4">
                                     <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                                         {CATEGORIES.find(c => c.id === selectedScenario.category)?.label}
                                     </span>
                                     <span>•</span>
                                     <span>{selectedScenario.title.split('：')[0]}</span>
                                 </div>
-                                <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-8">
+                                <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed mb-8">
                                     {selectedScenario.desc}
                                 </p>
 
                                 <div className="flex gap-3">
                                     <button
                                         onClick={handleCloseModal}
-                                        className="flex-1 py-3 px-4 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white transition-colors font-medium text-sm"
+                                        className="flex-1 py-3 px-4 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white transition-colors font-medium text-base"
                                     >
                                         再想想
                                     </button>
                                     <button
                                         onClick={handleConfirmStart}
-                                        className="flex-[2] py-3 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-gemini-accent dark:to-gemini-purple text-white font-bold shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-gemini-accent/25 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                        className="flex-[2] py-3 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-gemini-accent dark:to-gemini-purple text-white font-bold text-base shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-gemini-accent/25 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                     >
-                                        <Play className="w-4 h-4 fill-current" />
+                                        <Play className="w-5 h-5 fill-current" />
                                         開始挑戰
                                     </button>
                                 </div>

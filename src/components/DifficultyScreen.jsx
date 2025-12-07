@@ -53,10 +53,10 @@ const DifficultyScreen = ({ onSelect, onBack }) => {
             </div>
 
             <div className="flex-1 flex flex-col items-center justify-start overflow-y-auto p-4 sm:p-8 pt-20 sm:pt-24">
-                <motion.h2 variants={item} className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-white mb-3 font-serif drop-shadow-lg text-center">
+                <motion.h2 variants={item} className="text-4xl sm:text-5xl font-bold text-slate-800 dark:text-white mb-3 font-serif drop-shadow-lg text-center">
                     選擇學習情境
                 </motion.h2>
-                <motion.p variants={item} className="text-slate-600 dark:text-slate-300 mb-8 sm:mb-12 text-center text-base sm:text-lg max-w-2xl font-light px-4">
+                <motion.p variants={item} className="text-slate-600 dark:text-slate-300 mb-8 sm:mb-12 text-center text-lg sm:text-xl max-w-2xl font-light px-4">
                     每個難度都代表著不同的人生階段與挑戰。<br />準備好測試你的成語智慧了嗎？
                 </motion.p>
 
@@ -79,11 +79,11 @@ const DifficultyScreen = ({ onSelect, onBack }) => {
                                 <span className="text-5xl sm:text-6xl filter drop-shadow-xl group-hover:scale-110 transition-transform duration-300 inline-block">{diff.icon}</span>
                             </div>
 
-                            <h3 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 dark:group-hover:from-white dark:group-hover:to-slate-200 transition-all">
+                            <h3 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white mb-2 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 dark:group-hover:from-white dark:group-hover:to-slate-200 transition-all">
                                 {diff.label}
                             </h3>
 
-                            <p className="text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors leading-relaxed text-sm font-light">
+                            <p className="text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors leading-relaxed text-base sm:text-lg font-light">
                                 {diff.subtitle}
                             </p>
 

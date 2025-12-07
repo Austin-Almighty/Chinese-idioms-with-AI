@@ -46,7 +46,19 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                 <div className="w-8 sm:w-10"></div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 custom-scrollbar relative">
+            {/* Scenario Background Image - Subtle atmospheric effect */}
+            {scene.imageUrl && (
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    <img
+                        src={scene.imageUrl}
+                        alt=""
+                        className="w-full h-full object-cover opacity-75 dark:opacity-[0.85] blur-md scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/30 dark:from-slate-900/30 dark:via-transparent dark:to-slate-900/30" />
+                </div>
+            )}
+
+            <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 custom-scrollbar relative z-10">
                 <AnimatePresence initial={false}>
                     {storyLog.map((log, index) => (
                         <motion.div
@@ -56,7 +68,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                             transition={{ duration: 0.4, ease: "easeOut" }}
                             className={`flex ${log.type === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
-                            <div className={`max-w-[90%] md:max-w-[75%] p-6 rounded-2xl shadow-lg leading-relaxed text-base md:text-lg whitespace-pre-wrap backdrop-blur-sm border transition-colors duration-300 ${log.type === 'user'
+                            <div className={`max-w-[90%] md:max-w-[75%] p-6 rounded-2xl shadow-lg leading-relaxed text-lg md:text-xl whitespace-pre-wrap backdrop-blur-sm border transition-colors duration-300 ${log.type === 'user'
                                 ? 'bg-gradient-to-br from-blue-500/90 to-purple-600/90 dark:from-gemini-accent/80 dark:to-gemini-purple/80 text-white rounded-br-none border-white/20'
                                 : 'bg-white/60 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 border-white/40 dark:border-white/10 rounded-bl-none'
                                 }`}>
@@ -99,7 +111,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                 <div ref={logEndRef} />
             </div>
 
-            <div className="p-3 sm:p-6 border-t border-white/20 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-xl z-20 min-h-[140px] sm:min-h-[160px] transition-colors duration-300">
+            <div className="p-3 sm:p-6 border-t border-white/20 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-xl z-20 min-h-[160px] sm:min-h-[180px] transition-colors duration-300">
                 <AnimatePresence>
                     {isGameOver && areOptionsVisible ? (
                         <motion.div
@@ -129,7 +141,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                                 hidden: { opacity: 0 },
                                 show: { opacity: 1, transition: { staggerChildren: 0.1 } }
                             }}
-                            className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+                            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                             {shuffledOptions.map((option, idx) => (
                                 <motion.button
                                     key={option.id}
@@ -141,14 +153,14 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => onChoice(option)}
                                     disabled={isLoading}
-                                    className={`group text-left px-3 sm:px-4 pb-3 sm:pb-4 pt-3 sm:pt-4 rounded-xl border transition-all duration-200 relative overflow-hidden flex flex-col justify-start h-full ${isLoading
+                                    className={`group text-left px-4 sm:px-6 pb-4 sm:pb-6 pt-4 sm:pt-6 rounded-xl border transition-all duration-200 relative overflow-hidden flex flex-col justify-start h-full ${isLoading
                                         ? 'opacity-50 cursor-not-allowed bg-slate-100/50 dark:bg-slate-800/50 border-white/20 dark:border-white/5'
-                                        : 'glass-btn border-white/20 dark:border-white/10 hover:border-blue-400/50 dark:hover:border-gemini-accent/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+                                        : 'bg-white/80 dark:bg-white/10 backdrop-blur-md border-slate-200 dark:border-white/10 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 dark:hover:shadow-gemini-accent/20 hover:border-blue-400/50 dark:hover:border-gemini-accent/50 hover:-translate-y-1'
                                         }`}>
                                     <div className="relative z-10">
-                                        <div className="text-base sm:text-lg font-bold text-slate-800 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-gemini-accent transition-colors">{option.idiom}</div>
-                                        <div className="text-xs text-slate-500 dark:text-slate-400 mb-2 group-hover:text-slate-600 dark:group-hover:text-slate-300">{option.literal}</div>
-                                        <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium pl-2 border-l-2 border-purple-400/50 dark:border-gemini-purple/50 group-hover:border-blue-500 dark:group-hover:border-gemini-accent transition-colors">{option.strategy}</div>
+                                        <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-gemini-accent transition-colors">{option.idiom}</div>
+                                        <div className="text-sm text-slate-500 dark:text-slate-400 mb-3 group-hover:text-slate-600 dark:group-hover:text-slate-300">{option.literal}</div>
+                                        <div className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-medium pl-3 border-l-2 border-purple-400/50 dark:border-gemini-purple/50 group-hover:border-blue-500 dark:group-hover:border-gemini-accent transition-colors">{option.strategy}</div>
                                     </div>
                                 </motion.button>
                             ))}
