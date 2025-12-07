@@ -47,13 +47,13 @@ const SettingsModal = ({ isOpen, onClose }) => {
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-white/20 dark:border-white/10">
+            <DialogContent className="sm:max-w-[425px] bg-background/98 dark:bg-background/90 backdrop-blur-xl border-border shadow-2xl">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-xl">
-                        <Settings className="w-5 h-5 text-blue-500 dark:text-gemini-accent" />
+                    <DialogTitle className="flex items-center gap-2 text-xl text-foreground">
+                        <Settings className="w-5 h-5 text-primary" />
                         設定
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-muted-foreground">
                         調整遊戲外觀與 AI 模型參數。
                     </DialogDescription>
                 </DialogHeader>
@@ -61,7 +61,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
                     {/* Theme Toggle */}
                     <div className="flex items-center justify-between space-x-2">
                         <Label htmlFor="theme-mode" className="flex flex-col space-y-1">
-                            <span className="font-medium">外觀主題</span>
+                            <span className="font-medium text-foreground">外觀主題</span>
                             <span className="font-normal text-xs text-muted-foreground">
                                 {theme === 'dark' ? '目前為深色模式' : '目前為淺色模式'}
                             </span>
@@ -79,8 +79,8 @@ const SettingsModal = ({ isOpen, onClose }) => {
 
                     {/* API Key Input */}
                     <div className="grid gap-2">
-                        <Label htmlFor="api-key" className="flex items-center gap-2">
-                            <Key className="w-4 h-4 text-purple-500 dark:text-gemini-purple" />
+                        <Label htmlFor="api-key" className="flex items-center gap-2 text-foreground">
+                            <Key className="w-4 h-4 text-primary" />
                             Google Gemini API Key
                         </Label>
                         <input
@@ -89,7 +89,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
                             value={key}
                             onChange={(e) => setKey(e.target.value)}
                             placeholder="AIzaSy..."
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono text-foreground"
                         />
                         <p className="text-[0.8rem] text-muted-foreground">
                             已預設 Demo API Key。若需使用自己的 Key,請在此輸入。
@@ -98,15 +98,15 @@ const SettingsModal = ({ isOpen, onClose }) => {
 
                     {/* Model Selection */}
                     <div className="grid gap-2">
-                        <Label htmlFor="model" className="flex items-center gap-2">
-                            <Cpu className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                        <Label htmlFor="model" className="flex items-center gap-2 text-foreground">
+                            <Cpu className="w-4 h-4 text-primary" />
                             AI Model
                         </Label>
                         <select
                             id="model"
                             value={model}
                             onChange={(e) => setModel(e.target.value)}
-                            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
                         >
                             {MODELS.map(m => (
                                 <option key={m.id} value={m.id}>
@@ -117,7 +117,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
                     </div>
                 </div>
                 <div className="flex justify-end">
-                    <Button onClick={handleSave} className="bg-blue-500 dark:bg-gemini-accent hover:bg-blue-600 dark:hover:bg-blue-400 text-white">
+                    <Button onClick={handleSave} className="w-full sm:w-auto">
                         儲存設定
                     </Button>
                 </div>

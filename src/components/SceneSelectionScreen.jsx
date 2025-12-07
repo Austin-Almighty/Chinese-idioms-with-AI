@@ -47,8 +47,8 @@ const jsonScenarios = Object.entries(rawScenarios).map(([key, data], index) => {
     const category = getCategory(data['角色'], data['故事內容/衝突']);
     const scenarioNumber = index + 1;
 
-    // Map AI-generated images for scenarios 1-15 (optimized WebP format)
-    const imageUrl = scenarioNumber <= 15
+    // Map AI-generated images for scenarios 1-42 (optimized WebP format)
+    const imageUrl = scenarioNumber <= 42
         ? `/img/scenario${scenarioNumber}.webp`
         : "";
 
