@@ -162,7 +162,7 @@ export const analyzeGameplay = async (history) => {
         "storySummary": "故事摘要（2-3句話）",
         "storySummaryEn": "Story summary in English (2-3 sentences)",
         "idiomAnalysis": [
-          {"idiom": "成語", "verdict": "好/尚可/不當", "comment": "一句點評"}
+          {"idiom": "成語", "verdict": "好/尚可/不當", "comment": "一句點評", "commentEn": "One sentence comment in English"}
         ],
         "advice": "一句話建議",
         "adviceEn": "One sentence advice in English",

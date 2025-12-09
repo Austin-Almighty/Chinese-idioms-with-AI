@@ -160,7 +160,7 @@ const EndingScreen = ({ result, storyLog, onRestart }) => {
                                                         </span>
                                                     </div>
                                                     <p className="text-slate-600 dark:text-slate-300 text-sm">
-                                                        {analysis.comment}
+                                                        {isEnglish ? (analysis.commentEn || analysis.comment) : analysis.comment}
                                                     </p>
                                                 </div>
                                             </div>
