@@ -143,35 +143,33 @@ export const analyzeGameplay = async (history) => {
     const model = genAI.getGenerativeModel({ model: modelId });
 
     const prompt = `
-      你是一位資深的成語導師，正在與學生進行一對一的課後點評。請分析以下遊戲過程，並以第二人稱（「你」）的方式，用溫暖、鼓勵但不失專業的口吻，直接與學生對話。
+      你是成語導師，請分析學生的遊戲表現。用溫暖但簡潔的第二人稱語氣。
       
-      遊戲歷史紀錄：
-      ${history.map(h => `${h.type === 'user' ? '學生選擇' : '情境描述'}: ${h.text}`).join('\n')}
+      遊戲紀錄：
+      ${history.map(h => `${h.type === 'user' ? '[選擇]' : '[情境]'}: ${h.text}`).join('\n')}
       
-      評估要求：
-      1. 給予學生一個富有個性的稱號（例如：深思熟慮的智者、果敢的行動派）
-      2. 用第二人稱「你」直接對學生說話，評價他們對成語的理解與運用策略
-      3. 具體分析每個選擇，並給予建設性的回饋
-      4. 語氣要像一位關心學生的導師，而非客觀的旁觀者
-      5. 統計策略類型（果斷 Aggressive、深思 Conservative、誤用 Negative）
+      要求：
+      1. 給學生一個創意稱號（4-6字）
+      2. 簡短總結故事走向（2-3句）
+      3. 點評每個成語選擇是否恰當（每個1句）
+      4. 給予一句話建議
+      5. 統計策略：果斷(aggressive)、深思(conservative)、誤用(negative)
       
-      範例語氣：
-      - 「你在面對XX情境時，選擇了『成語』，這展現了你XX的特質...」
-      - 「我注意到你傾向於XX策略，這在XX情況下很有效...」
-      - 「建議你未來可以嘗試...」
-      
-      輸出格式（僅回傳有效的 JSON）：
+      回傳 JSON 格式：
       {
-        "title": "學生稱號（中文，例如：深思熟慮的智者）",
-        "evaluation": "詳細的第二人稱評價內容，直接對學生說話...",
-        "stats": {
-          "aggressive": 2,
-          "conservative": 1,
-          "negative": 0
-        }
+        "title": "中文稱號",
+        "titleEn": "English Title (e.g. The Strategic Thinker)",
+        "storySummary": "故事摘要（2-3句話）",
+        "storySummaryEn": "Story summary in English (2-3 sentences)",
+        "idiomAnalysis": [
+          {"idiom": "成語", "verdict": "好/尚可/不當", "comment": "一句點評"}
+        ],
+        "advice": "一句話建議",
+        "adviceEn": "One sentence advice in English",
+        "stats": {"aggressive": 0, "conservative": 0, "negative": 0}
       }
       
-      重要：僅回傳有效的 JSON 格式，不要包含其他說明文字。
+      僅回傳有效 JSON，不要包含其他文字。
     `;
 
     console.log("[Gemini API] Input (Analysis):", prompt);

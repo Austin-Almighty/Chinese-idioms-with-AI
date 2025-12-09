@@ -190,8 +190,8 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                     key={cat.id}
                                     onClick={() => setActiveTab(cat.id)}
                                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-medium transition-all duration-200 ${isActive
-                                        ? 'bg-white dark:bg-white text-slate-900 shadow-lg shadow-black/5 dark:shadow-white/10'
-                                        : 'bg-white/40 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white'
+                                        ? 'bg-white dark:bg-white text-slate-900 shadow-lg shadow-slate-300/50 dark:shadow-white/10 border border-slate-200 dark:border-transparent'
+                                        : 'bg-white/60 dark:bg-white/5 text-slate-600 dark:text-slate-400 border border-slate-200/50 dark:border-white/5 hover:bg-white hover:shadow-md hover:shadow-slate-200/50 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/10 hover:-translate-y-0.5'
                                         }`}
                                 >
                                     <Icon className="w-5 h-5" />
@@ -247,8 +247,7 @@ const SceneSelectionScreen = ({ difficulty, onSelect, onBack }) => {
                                             {scene.desc}
                                         </p>
 
-                                        <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-200 dark:border-white/5">
-                                            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">ID: {scene.id.slice(0, 6)}</span>
+                                        <div className="flex items-center justify-end mt-auto pt-3 border-t border-slate-200 dark:border-white/5">
                                             <span className="text-xs text-blue-500 dark:text-gemini-accent opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 font-medium">
                                                 選擇 →
                                             </span>

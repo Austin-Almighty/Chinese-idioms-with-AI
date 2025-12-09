@@ -68,7 +68,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                             transition={{ duration: 0.4, ease: "easeOut" }}
                             className={`flex ${log.type === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
-                            <div className={`max-w-[90%] md:max-w-[75%] p-6 rounded-2xl shadow-lg leading-relaxed text-lg md:text-xl whitespace-pre-wrap backdrop-blur-sm border transition-colors duration-300 ${log.type === 'user'
+                            <div className={`max-w-[90%] md:max-w-[75%] p-6 rounded-2xl shadow-lg leading-relaxed text-xl md:text-2xl whitespace-pre-wrap backdrop-blur-sm border transition-colors duration-300 ${log.type === 'user'
                                 ? 'bg-gradient-to-br from-blue-500/90 to-purple-600/90 dark:from-gemini-accent/80 dark:to-gemini-purple/80 text-white rounded-br-none border-white/20'
                                 : 'bg-white/60 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 border-white/40 dark:border-white/10 rounded-bl-none'
                                 }`}>
