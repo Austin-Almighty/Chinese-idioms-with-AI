@@ -1,19 +1,11 @@
-import {
-  GoogleGenAI,
-  createUserContent,
-  createPartFromUri,
-} from "@google/genai";
-import fs from "fs";
-import path from "path";
-
-const MODEL_NAME = "gemini-2.0-flash-001";
-const CACHE_TTL = "3600s"; // 1 hour
+// Netlify Function for initializing Gemini context cache
+// Using dynamic import to avoid bundling issues
 
 export async function handler(event, context) {
   console.log("=== init-cache function started ===");
   
   try {
-    // Check API key
+    // Check API key first
     const apiKey = process.env.GEMINI_API_KEY;
     console.log("API key configured:", apiKey ? "Yes (length: " + apiKey.length + ")" : "NO - MISSING!");
     
@@ -28,9 +20,19 @@ export async function handler(event, context) {
       };
     }
 
+    // Dynamic import to avoid bundling issues
+    const { GoogleGenAI, createUserContent, createPartFromUri } = await import("@google/genai");
+    const fs = await import("fs");
+    const path = await import("path");
+
+    // "gemini-1.5-flash-001" and "gemini-1.5-pro-001" support caching
+    // "gemini-1.5-flash-001" is the most cost effective
+    const MODEL_NAME = "gemini-2.5-pro"; 
+    const CACHE_TTL = "3600s"; // 1 hour
+
     const ai = new GoogleGenAI({ apiKey });
 
-    // Step 1: Find and upload the idioms CSV file
+    // Step 1: Find the idioms CSV file
     const csvPath = path.join(process.cwd(), "src/data/idioms_filtered.csv");
     console.log("Looking for CSV at:", csvPath);
     
@@ -38,7 +40,14 @@ export async function handler(event, context) {
     if (!fs.existsSync(csvPath)) {
       console.error("CSV file not found at:", csvPath);
       console.log("Current working directory:", process.cwd());
-      console.log("Directory contents:", fs.readdirSync(process.cwd()));
+      
+      // Try to list what files are available
+      try {
+        const files = fs.readdirSync(process.cwd());
+        console.log("Directory contents:", files);
+      } catch (e) {
+        console.log("Could not list directory:", e.message);
+      }
       
       return {
         statusCode: 500,
@@ -53,6 +62,7 @@ export async function handler(event, context) {
     
     console.log("CSV file found, uploading...");
     
+    // Upload the CSV file
     const uploadedFile = await ai.files.upload({
       file: csvPath,
       config: { 
@@ -120,9 +130,9 @@ export async function handler(event, context) {
         error: "Failed to create cache",
         message: error.message,
         name: error.name,
+        stack: error.stack?.split('\n').slice(0, 5).join('\n'),
         hint: "Check Netlify Functions logs for more details",
       }),
     };
   }
 }
-
