@@ -10,22 +10,48 @@ const MODEL_NAME = "gemini-2.0-flash-001";
 const CACHE_TTL = "3600s"; // 1 hour
 
 export async function handler(event, context) {
+  console.log("=== init-cache function started ===");
+  
   try {
+    // Check API key
     const apiKey = process.env.GEMINI_API_KEY;
+    console.log("API key configured:", apiKey ? "Yes (length: " + apiKey.length + ")" : "NO - MISSING!");
     
     if (!apiKey) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: "API key not configured on server" }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          error: "API key not configured on server",
+          hint: "Add GEMINI_API_KEY (not VITE_GEMINI_API_KEY) to Netlify environment variables" 
+        }),
       };
     }
 
     const ai = new GoogleGenAI({ apiKey });
 
-    // Step 1: Upload the idioms CSV file
+    // Step 1: Find and upload the idioms CSV file
     const csvPath = path.join(process.cwd(), "src/data/idioms_filtered.csv");
+    console.log("Looking for CSV at:", csvPath);
     
-    console.log("Uploading CSV from:", csvPath);
+    // Check if file exists
+    if (!fs.existsSync(csvPath)) {
+      console.error("CSV file not found at:", csvPath);
+      console.log("Current working directory:", process.cwd());
+      console.log("Directory contents:", fs.readdirSync(process.cwd()));
+      
+      return {
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          error: "CSV file not found",
+          path: csvPath,
+          cwd: process.cwd(),
+        }),
+      };
+    }
+    
+    console.log("CSV file found, uploading...");
     
     const uploadedFile = await ai.files.upload({
       file: csvPath,
@@ -38,6 +64,8 @@ export async function handler(event, context) {
     console.log("Uploaded file:", uploadedFile.name, uploadedFile.uri);
 
     // Step 2: Create cache with the uploaded file
+    console.log("Creating cache...");
+    
     const cache = await ai.caches.create({
       model: MODEL_NAME,
       config: {
@@ -63,7 +91,7 @@ export async function handler(event, context) {
       },
     });
 
-    console.log("Cache created:", cache.name);
+    console.log("Cache created successfully:", cache.name);
 
     // Return cache info to frontend
     return {
@@ -80,14 +108,21 @@ export async function handler(event, context) {
       }),
     };
   } catch (error) {
-    console.error("Cache creation error:", error);
+    console.error("=== Cache creation error ===");
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
+    
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         error: "Failed to create cache",
         message: error.message,
+        name: error.name,
+        hint: "Check Netlify Functions logs for more details",
       }),
     };
   }
 }
+
