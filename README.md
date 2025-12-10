@@ -3,7 +3,10 @@
 > **拒絕死記硬背，用生存本能學成語。**
 > 全球首款由 Google Gemini AI 驅動的沉浸式成語情境模擬器。
 
-![Project Banner](https://placehold.co/1200x400/0f172a/3b82f6?text=Idiom+Survival+Guide)
+![Project Banner](public/img/readmeimage.jpg)
+
+## 🎮 線上試玩 (Live Demo)
+👉 **立即體驗**: [https://learnidiomswithai.netlify.app/](https://learnidiomswithai.netlify.app/)
 
 ## 📖 專案簡介
 
@@ -16,6 +19,12 @@
 ### 🧠 AI 驅動的無限劇本
 告別千篇一律的對話樹。透過 **Google Gemini API** 的強大算力，NPC 的反應、劇情的走向完全根據你的決策即時生成。每一次遊玩，都是全新的平行宇宙。
 
+### 📚 AI 智慧成語字典 (New!)
+這不僅是遊戲，更是最強大的學習工具：
+- **即點即查**：在遊戲結算的分析報告中，點擊任何成語即可查看詳細釋義。
+- **適性化解說**：根據您選擇的遊戲難度（簡單/中等/困難），AI 會自動調整解釋的深度與方式（例如：為初學者提供淺顯易懂的白話文解釋，為進階者提供詳細用法與典故）。
+- **智慧快取技術**：內建高效能快取機制，查詢過的成語無需重複等待，秒開顯示。
+
 ### 🎭 多元時空情境
 從古典文學到賽博龐克，穿越古今中外：
 - **經典文學**：在《紅樓夢》的賈府權謀中求生。
@@ -25,9 +34,6 @@
 
 ### 📊 智能戰略分析
 遊戲結束後，AI 導師將化身為你的私人教練，分析你的決策風格（如「果斷型」、「謀略型」），並針對你誤用的成語提供精闢的覆盤建議，讓你「知其然，更知其所以然」。
-
-### 💎 極致的視覺體驗
-採用最新的 **Glassmorphism (玻璃擬態)** 設計語言，搭配 **Framer Motion** 的流暢動畫與深色模式介面，打造出充滿未來感與沉浸感的學習體驗。
 
 ## 🛠️ 技術堆疊 (Tech Stack)
 
@@ -39,43 +45,7 @@
 - **AI 模型**: [Google Gemini Pro](https://ai.google.dev/)
 - **圖標庫**: [Lucide React](https://lucide.dev/)
 
-## 🚀 快速開始 (Getting Started)
 
-### 前置需求
-- Node.js (建議 v18 以上)
-- Google Gemini API Key (請至 [Google AI Studio](https://aistudio.google.com/app/apikey) 免費申請)
-
-### 安裝步驟
-
-1.  **複製專案 (Clone)**
-    ```bash
-    git clone https://github.com/your-username/idiom-survival-guide.git
-    cd idiom-survival-guide
-    ```
-
-2.  **安裝依賴 (Install)**
-    ```bash
-    npm install
-    ```
-
-3.  **啟動開發伺服器 (Dev)**
-    ```bash
-    npm run dev
-    ```
-
-4.  **設定 API Key**
-    - 開啟瀏覽器進入 App。
-    - 點擊右上角的 **設定 (齒輪圖示)**。
-    - 輸入您的 Google Gemini API Key 並儲存。
-
-## 🗺️ 開發路線圖 (Roadmap)
-
-- [x] **核心架構搭建**: Vite + React + Tailwind v4
-- [x] **AI 串接**: 整合 Gemini Pro 進行劇情生成與分析
-- [x] **UI/UX 升級**: 實裝玻璃擬態設計與動態轉場
-- [x] **情境擴充**: 實作難度分級與分類篩選系統
-- [ ] **內容補完**: 擴充至 40+ 個精選劇本
-- [ ] **成就系統**: 記錄玩家的學習里程碑
 
 ---
 
