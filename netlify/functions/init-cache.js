@@ -25,8 +25,7 @@ export async function handler(event, context) {
     const fs = await import("fs");
     const path = await import("path");
 
-    // "gemini-1.5-flash-001" and "gemini-1.5-pro-001" support caching
-    // "gemini-1.5-flash-001" is the most cost effective
+    // User requested "gemini-pro-2.5" (interpreting as gemini-2.5-pro)
     const MODEL_NAME = "gemini-2.5-pro"; 
     const CACHE_TTL = "3600s"; // 1 hour
 
