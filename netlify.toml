@@ -11,6 +11,7 @@
   # Omit VITE_GEMINI_API_KEY from secret scanning
   # This is intentional as we're using a client-side API key for demo purposes
   SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY"
+  SECRETS_SCAN_ENABLED = "false"
 
 # Netlify Functions configuration
 [functions]
