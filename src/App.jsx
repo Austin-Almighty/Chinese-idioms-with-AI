@@ -154,7 +154,7 @@ const App = () => {
         />
       );
       case 'analyzing': return <AnalyzingScreen key="analyzing" />;
-      case 'ending': return <EndingScreen key="ending" result={analysisResult} storyLog={storyLog} onRestart={handleRestart} />;
+      case 'ending': return <EndingScreen key="ending" result={analysisResult} storyLog={storyLog} difficulty={difficulty} onRestart={handleRestart} />;
       case 'debug': return <EndingScreenDebug onRestart={handleRestart} />;
       default: return null;
     }

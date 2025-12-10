@@ -155,6 +155,66 @@ const parseGeminiResponse = (text) => {
   }
 };
 
+// ============================================
+// IDIOM EXPLANATION (for popup)
+// ============================================
+
+/**
+ * Get idiom explanation from Gemini API
+ * @param {string} idiom - The idiom to explain
+ * @param {string} difficulty - Game difficulty ('easy', 'medium', 'hard')
+ * @returns {Promise<object>} Idiom explanation data
+ */
+export const getIdiomExplanation = async (idiom, difficulty) => {
+  try {
+    const genAI = getGenAI();
+    const modelId = getStoredModel();
+    const model = genAI.getGenerativeModel({ model: modelId });
+
+    const isEasy = difficulty === '簡單' || difficulty === 'easy' || difficulty === 'Easy';
+    
+    const prompt = isEasy 
+      ? `請用簡單易懂的方式解釋成語「${idiom}」。
+
+回傳 JSON 格式：
+{
+  "idiom": "${idiom}",
+  "definition": "完整的成語釋義（包含來源典故）",
+  "simple": "給初學者的簡單解釋（一兩句話，淺顯易懂）"
+}
+
+僅回傳有效 JSON，不要包含其他文字。`
+      : `請解釋成語「${idiom}」。
+
+回傳 JSON 格式：
+{
+  "idiom": "${idiom}",
+  "definition": "完整的成語釋義（包含來源典故）",
+  "usage": "用法說明（包含適用情境、褒貶義等）"
+}
+
+僅回傳有效 JSON，不要包含其他文字。`;
+
+    console.log('[Gemini API] Fetching idiom explanation:', idiom);
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    console.log('[Gemini API] Idiom explanation response:', text);
+
+    const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(jsonStr);
+  } catch (error) {
+    console.error('[Gemini API] Idiom Explanation Error:', error);
+    throw handleGeminiError(error);
+  }
+};
+
+// ============================================
+// ANALYSIS (uses legacy SDK for simplicity)
+// ============================================
+
 export const analyzeGameplay = async (history) => {
   try {
     const genAI = getGenAI();

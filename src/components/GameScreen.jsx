@@ -144,7 +144,7 @@ const GameScreen = ({ scene, storyLog, options, isLoading, onChoice, onBack, isG
                             className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                             {shuffledOptions.map((option, idx) => (
                                 <motion.button
-                                    key={option.id}
+                                    key={`${option.id}-${option.idiom}`}
                                     variants={{
                                         hidden: { opacity: 0, y: 20, scale: 0.95 },
                                         show: { opacity: 1, y: 0, scale: 1 }
