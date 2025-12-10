@@ -99,7 +99,7 @@ export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
         },
         {
           role: "model",
-          parts: [{ text: "Understood. I have processed the idiom database and I am ready to start the game. Please provide the setting and difficulty." }],
+          parts: [{ text: "Understood. I have reviewed the 1,543 approved idioms and will ONLY use idioms from this list. I will track used idioms to avoid repetition within each game session. Ready to start the game." }],
         },
       ],
     });
@@ -110,7 +110,9 @@ export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
       Description: ${scenario.desc}
       Initial Context: ${scenario.initialText}
       
-      Start Round 1.
+      REMINDER: Use ONLY idioms from the approved list. Difficulty level is "${difficulty}".
+      
+      Start Round 1 now.
     `;
 
     console.log(`[Gemini API] Input (Start Game) [Model: ${modelId}]:`, msg);
