@@ -1,11 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { GoogleGenAI } from "@google/genai";
 import { GAME_SYSTEM_PROMPT } from "../data/prompts";
 import { handleGeminiError } from "./errorHandler";
+import idiomsData from "../data/idioms_filtered.csv?raw";
 
 const API_KEY_STORAGE_KEY = "gemini_api_key";
 const API_MODEL_STORAGE_KEY = "gemini_model";
-const CACHE_STORAGE_KEY = "gemini_idioms_cache";
 
 // Get API key from localStorage first, then fall back to environment variable
 export const getApiKey = () => {
@@ -22,7 +21,6 @@ export const setApiKey = (key) => localStorage.setItem(API_KEY_STORAGE_KEY, key)
 export const getStoredModel = () => localStorage.getItem(API_MODEL_STORAGE_KEY) || "gemini-2.5-flash";
 export const setStoredModel = (model) => localStorage.setItem(API_MODEL_STORAGE_KEY, model);
 
-// Legacy SDK client (for non-cached operations)
 const getGenAI = () => {
   const key = getApiKey();
   if (!key || key === 'your_api_key_here') {
@@ -31,69 +29,8 @@ const getGenAI = () => {
   return new GoogleGenerativeAI(key);
 };
 
-// New SDK client (for cached operations)
-const getGenAIWithCache = () => {
-  const key = getApiKey();
-  if (!key || key === 'your_api_key_here') {
-    throw new Error("API Key not configured. Please add your Gemini API key to the .env file or Settings.");
-  }
-  return new GoogleGenAI({ apiKey: key });
-};
-
-// ============================================
-// CACHE MANAGEMENT
-// ============================================
-
-/**
- * Initialize or retrieve the idioms cache
- * @returns {Promise<{cacheName: string, model: string, expiresAt: number}>}
- */
-export async function initializeIdiomsCache() {
-  // Check for existing valid cache in sessionStorage
-  const stored = sessionStorage.getItem(CACHE_STORAGE_KEY);
-  if (stored) {
-    const cacheInfo = JSON.parse(stored);
-    if (Date.now() < cacheInfo.expiresAt) {
-      console.log("[Cache] Using existing cache:", cacheInfo.cacheName);
-      return cacheInfo;
-    }
-    console.log("[Cache] Cache expired, creating new one...");
-    sessionStorage.removeItem(CACHE_STORAGE_KEY);
-  }
-
-  // Create new cache via Netlify function
-  console.log("[Cache] Initializing idioms cache...");
-  const response = await fetch("/.netlify/functions/init-cache");
-  
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || "Failed to initialize idioms cache");
-  }
-
-  const cacheInfo = await response.json();
-  sessionStorage.setItem(CACHE_STORAGE_KEY, JSON.stringify(cacheInfo));
-  
-  console.log("[Cache] New cache created:", cacheInfo.cacheName);
-  console.log("[Cache] Token count:", cacheInfo.tokenCount);
-  
-  return cacheInfo;
-}
-
-/**
- * Clear the cached content (for debugging/testing)
- */
-export function clearIdiomsCache() {
-  sessionStorage.removeItem(CACHE_STORAGE_KEY);
-  console.log("[Cache] Cache cleared");
-}
-
-// ============================================
-// STREAMING & RESPONSE HANDLING
-// ============================================
-
-// Store conversation history for cached sessions
-let cachedConversationHistory = [];
-let currentCacheInfo = null;
+// Store the chat session in memory
+let chatSession = null;
 
 const SEPARATOR = "---JSON---";
 
@@ -110,7 +47,7 @@ const handleStreamResponse = async (result, onUpdate) => {
       if (fullText.includes(SEPARATOR)) {
         isJsonFound = true;
         const [storyPart, potentialJson] = fullText.split(SEPARATOR);
-        onUpdate(storyPart.trim());
+        onUpdate(storyPart.trim()); // Final update for story text
         jsonPart = potentialJson || "";
       } else {
         onUpdate(fullText);
@@ -120,6 +57,7 @@ const handleStreamResponse = async (result, onUpdate) => {
     }
   }
 
+  // If separator wasn't found during stream (edge case), try to split at the end
   if (!isJsonFound && fullText.includes(SEPARATOR)) {
     const [storyPart, potentialJson] = fullText.split(SEPARATOR);
     onUpdate(storyPart.trim());
@@ -131,85 +69,52 @@ const handleStreamResponse = async (result, onUpdate) => {
   return parseGeminiResponse(jsonPart);
 };
 
-// Handle streaming for new SDK (slightly different structure)
-const handleNewSdkStreamResponse = async (response, onUpdate) => {
-  let fullText = "";
-  let jsonPart = "";
-  let isJsonFound = false;
-
-  // The new SDK returns an async iterable directly
-  for await (const chunk of response) {
-    const chunkText = chunk.text || "";
-    fullText += chunkText;
-
-    if (!isJsonFound) {
-      if (fullText.includes(SEPARATOR)) {
-        isJsonFound = true;
-        const [storyPart, potentialJson] = fullText.split(SEPARATOR);
-        onUpdate(storyPart.trim());
-        jsonPart = potentialJson || "";
-      } else {
-        onUpdate(fullText);
-      }
-    } else {
-      jsonPart += chunkText;
-    }
-  }
-
-  if (!isJsonFound && fullText.includes(SEPARATOR)) {
-    const [storyPart, potentialJson] = fullText.split(SEPARATOR);
-    onUpdate(storyPart.trim());
-    jsonPart = potentialJson;
-  }
-
-  console.log("[Gemini API] Raw Output:", fullText);
-
-  return { parsedData: parseGeminiResponse(jsonPart), fullText };
-};
-
-// ============================================
-// GAME FUNCTIONS (with Cache Support)
-// ============================================
-
 export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
   try {
-    // Initialize cache (will use existing if valid)
-    const cacheInfo = await initializeIdiomsCache();
-    currentCacheInfo = cacheInfo;
+    const genAI = getGenAI();
+    const modelId = getStoredModel();
+    const model = genAI.getGenerativeModel({ model: modelId });
+
+    // Implicit Caching Strategy:
+    // We inject the 1500+ idioms CSV data directly into the system prompt.
+    // Gemini (especially 1.5/2.5 Pro/Flash) will automatically cache this prefix
+    // if repeated, reducing latency and cost for subsequent similar requests (best effort).
     
-    const ai = getGenAIWithCache();
-    
-    // Build the game prompt (system instruction is already in the cache)
-    const gamePrompt = `${GAME_SYSTEM_PROMPT}
+    const augmentedSystemPrompt = `
+      ${GAME_SYSTEM_PROMPT}
 
-設定：${scenario.title}
-難度：${difficulty}
-描述：${scenario.desc}
-初始情境：${scenario.initialText}
+      # 參考資料庫：成語列表 (Reference Idioms Database)
+      以下是本次遊戲可用的成語列表 (CSV 格式)，請優先從中選取適當的成語：
+      
+      ${idiomsData}
+    `;
 
-開始第 1 回合。`;
-
-    console.log(`[Gemini API] Starting game with cached idioms [Model: ${cacheInfo.model}]`);
-
-    // Reset conversation history for new game
-    cachedConversationHistory = [
-      { role: "user", parts: [{ text: gamePrompt }] }
-    ];
-
-    const response = await ai.models.generateContentStream({
-      model: cacheInfo.model,
-      contents: gamePrompt,
-      config: { 
-        cachedContent: cacheInfo.cacheName,
-      },
+    chatSession = model.startChat({
+      history: [
+        {
+          role: "user",
+          parts: [{ text: augmentedSystemPrompt }],
+        },
+        {
+          role: "model",
+          parts: [{ text: "Understood. I have processed the idiom database and I am ready to start the game. Please provide the setting and difficulty." }],
+        },
+      ],
     });
 
-    const { parsedData, fullText } = await handleNewSdkStreamResponse(response, onUpdate);
-    
-    // Store model response in history
-    cachedConversationHistory.push({ role: "model", parts: [{ text: fullText }] });
+    const msg = `
+      Setting: ${scenario.title}
+      Difficulty: ${difficulty}
+      Description: ${scenario.desc}
+      Initial Context: ${scenario.initialText}
+      
+      Start Round 1.
+    `;
 
-    return parsedData;
+    console.log(`[Gemini API] Input (Start Game) [Model: ${modelId}]:`, msg);
+
+    const result = await chatSession.sendMessageStream(msg);
+    return handleStreamResponse(result, onUpdate);
 
   } catch (error) {
     console.error("[Gemini API] Start Game Error:", error);
@@ -218,43 +123,22 @@ export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
 };
 
 export const submitChoiceStream = async (choice, onUpdate) => {
-  if (!currentCacheInfo) throw new Error("Game session not started");
+  if (!chatSession) throw new Error("Game session not started");
 
   try {
-    const ai = getGenAIWithCache();
-    
     const msg = `User chose Option ${choice.id}: ${choice.idiom}`;
     console.log("[Gemini API] Input (Submit Choice):", msg);
-    
-    // Add user message to history
-    cachedConversationHistory.push({ role: "user", parts: [{ text: msg }] });
-
-    const response = await ai.models.generateContentStream({
-      model: currentCacheInfo.model,
-      contents: cachedConversationHistory,
-      config: { 
-        cachedContent: currentCacheInfo.cacheName,
-      },
-    });
-
-    const { parsedData, fullText } = await handleNewSdkStreamResponse(response, onUpdate);
-    
-    // Store model response in history
-    cachedConversationHistory.push({ role: "model", parts: [{ text: fullText }] });
-
-    return parsedData;
+    const result = await chatSession.sendMessageStream(msg);
+    return handleStreamResponse(result, onUpdate);
   } catch (error) {
     console.error("[Gemini API] Submit Choice Error:", error);
     throw handleGeminiError(error);
   }
 };
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
 const parseGeminiResponse = (text) => {
   try {
+    // Clean up potential markdown code blocks
     const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(jsonStr);
   } catch (e) {
@@ -267,16 +151,17 @@ const parseGeminiResponse = (text) => {
   }
 };
 
-// ============================================
-// ANALYSIS (uses legacy SDK for simplicity)
-// ============================================
-
 export const analyzeGameplay = async (history) => {
   try {
     const genAI = getGenAI();
     const modelId = getStoredModel();
     const model = genAI.getGenerativeModel({ model: modelId });
 
+    // For analysis, we don't necessarily need the whole CSV again unless checking validity, 
+    // but consistent context helps. However, to save tokens on this one-off call, 
+    // we might omit it or include it if specific validation is needed. 
+    // For now, let's keep it light as the game history contains the idioms used.
+    
     const prompt = `
       你是成語導師，請分析學生的遊戲表現。用溫暖但簡潔的第二人稱語氣。
       

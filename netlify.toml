@@ -13,13 +13,7 @@
   SECRETS_SCAN_OMIT_KEYS = "VITE_GEMINI_API_KEY"
   SECRETS_SCAN_ENABLED = "false"
 
-# Netlify Functions configuration
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
 
-[functions."init-cache"]
-  included_files = ["src/data/idioms_filtered.csv"]
 
 # Optional: Redirect rules for SPA routing
 [[redirects]]
