@@ -1,7 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GAME_SYSTEM_PROMPT } from "../data/prompts";
 import { handleGeminiError } from "./errorHandler";
-import idiomsData from "../data/idioms_filtered.csv?raw";
+// Use names only to save tokens (explicit caching not available on free tier)
+import idiomsData from "../data/idioms_names_only.csv?raw";
 
 const API_KEY_STORAGE_KEY = "gemini_api_key";
 const API_MODEL_STORAGE_KEY = "gemini_model";
@@ -76,15 +77,16 @@ export const startNewGameStream = async (scenario, difficulty, onUpdate) => {
     const model = genAI.getGenerativeModel({ model: modelId });
 
     // Implicit Caching Strategy:
-    // We inject the 1500+ idioms CSV data directly into the system prompt.
-    // Gemini (especially 1.5/2.5 Pro/Flash) will automatically cache this prefix
-    // if repeated, reducing latency and cost for subsequent similar requests (best effort).
+    // We inject ONLY the idiom names (~1500 tokens) to keep token usage low
+    // while ensuring the AI only picks from our approved list.
+    // We rely on the model's internal knowledge for the actual definitions.
     
     const augmentedSystemPrompt = `
       ${GAME_SYSTEM_PROMPT}
 
-      # 參考資料庫：成語列表 (Reference Idioms Database)
-      以下是本次遊戲可用的成語列表 (CSV 格式)，請優先從中選取適當的成語：
+      # 參考資料庫：成語列表 (Reference Idioms List)
+      以下是本次遊戲**必須**從中選取的成語列表。
+      請使用你內建的知識庫來確認這些成語的定義與解釋，但**僅限**使用列表中的成語。
       
       ${idiomsData}
     `;
