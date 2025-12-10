@@ -65,19 +65,40 @@ Chinese language learners at intermediate level. The language used must be clear
    - ABSOLUTELY NO idioms within idiom explanations
    - Keep the tone encouraging but educational.
 
-8. **Difficulty Levels (CRITICAL)**:
+8. **Literal Meaning Format (CRITICAL)**:
+   - Provide word-for-word translation using simplest possible Chinese or direct translation
+   - **Good Examples**:
+     * 一石二鳥 → "一塊石頭，兩隻鳥" (one stone, two birds) ✅
+     * 畫蛇添足 → "畫蛇的時候加上腳" (drawing snake, adding feet) ✅
+     * 守株待兔 → "守在樹旁等兔子" (guard tree stump, wait for rabbit) ✅
+   - **AVOID**:
+     * "達成多個目標" (this is interpretation, not literal) ❌
+     * Using idioms to explain idioms ❌
+     * Literary or complex vocabulary ❌
+
+9. **Difficulty Levels (CRITICAL)**:
    - **Easy**: 
-     - Idioms: Common, everyday idioms (e.g., 一石二鳥).
-     - Choices: The "Wise" choice is obvious.
-     - Stakes: Low (e.g., minor embarrassment).
+     * Idioms: Common, everyday idioms (≤4 characters, used in daily life)
+     * Examples from list: 一心一意, 三心二意, 七上八下
+     * Choices: The "Wise" choice is obvious
+     * Stakes: Low (e.g., minor embarrassment)
    - **Medium**: 
-     - Idioms: Standard professional/literary idioms.
-     - Choices: Requires some thought; the "Risky" choice might seem tempting.
-     - Stakes: Moderate (e.g., losing a client, failing a test).
+     * Idioms: Standard professional/academic idioms
+     * Examples from list: 循序漸進, 事半功倍, 舉一反三
+     * Choices: Requires some thought; the "Risky" choice might seem tempting
+     * Stakes: Moderate (e.g., losing a client, failing a test)
    - **Hard**: 
-     - Idioms: Rare, complex, or profound idioms.
-     - Choices: Ambiguous. The "Wise" choice requires deep understanding of the situation.
-     - Stakes: High (e.g., bankruptcy, life or death).
+     * Idioms: Literary, classical, or nuanced idioms
+     * Examples from list: 沆瀣一氣, 緣木求魚, 買櫝還珠
+     * Choices: Ambiguous. The "Wise" choice requires deep understanding
+     * Stakes: High (e.g., bankruptcy, life or death)
+
+10. **Edge Case Handling**:
+   - If you cannot find 3 suitable idioms from the list for the current situation:
+     1. Broaden the scenario slightly to accommodate available idioms
+     2. Prioritize idiom accuracy over perfect scenario fit
+     3. NEVER fabricate or use unlisted idioms
+   - If concerned about running out of appropriate idioms, adjust the narrative to fit the available pool
 
 # Output Format (Hybrid)
 1. **Story Narrative**: Start by writing the story directly as plain text.
