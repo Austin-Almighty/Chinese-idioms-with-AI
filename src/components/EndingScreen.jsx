@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { RotateCcw, Trophy, Brain, Zap, AlertTriangle, Languages, Check, X, Minus } from 'lucide-react';
+import { RotateCcw, Trophy, Brain, Zap, AlertTriangle, Languages, Check, X, Minus, ExternalLink } from 'lucide-react';
 import IdiomPopup from './IdiomPopup';
 
 const EndingScreen = ({ result, storyLog, difficulty, onRestart }) => {
@@ -229,6 +229,22 @@ const EndingScreen = ({ result, storyLog, difficulty, onRestart }) => {
                             </div>
                         </motion.div>
                     </div>
+
+                    {/* Questionnaire CTA */}
+                    <motion.div
+                        variants={item}
+                        className="border-t border-slate-200 dark:border-white/10 p-4 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 flex-shrink-0"
+                    >
+                        <a
+                            href="https://docs.google.com/forms/d/e/1FAIpQLScp80QTCz8GCcYPeH1ESNA0UMr2m92NZL-GTxn9kGzePl37cQ/viewform"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-blue-600 dark:from-gemini-purple dark:to-gemini-accent text-white font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/30 dark:hover:shadow-gemini-purple/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                            <span>幫助我們改進！填寫 30 秒問卷 📝</span>
+                            <ExternalLink className="w-4 h-4" />
+                        </a>
+                    </motion.div>
 
                 </motion.div>
             </motion.div>
